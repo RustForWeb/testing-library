@@ -10,4 +10,11 @@ repository.workspace = true
 version.workspace = true
 
 [dependencies]
-web-sys.workspace = true
+regex.workspace = true
+thiserror.workspace = true
+wasm-bindgen.workspace = true
+web-sys = { workspace = true, features = [
+    "Element",
+    "HtmlElement",
+    "NodeList",
+] }
