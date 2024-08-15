@@ -1,0 +1,13 @@
+[package]
+name = "testing-library-dom"
+description = "Rust port of DOM Testing Library."
+homepage = "https://testing-library.rustforweb.org"
+
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+web-sys.workspace = true
