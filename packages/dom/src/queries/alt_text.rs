@@ -12,8 +12,6 @@ pub fn query_all_by_alt_text(
     alt: &Matcher,
     options: MatcherOptions,
 ) -> Result<Vec<HtmlElement>, QueryError> {
-    // check_container_type(container);
-
     let valid_tag_regex = Regex::new(r"^(img|input|area|.+-.+)$").expect("Regex should be valid.");
 
     Ok(

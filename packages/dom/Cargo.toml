@@ -14,7 +14,13 @@ regex.workspace = true
 thiserror.workspace = true
 wasm-bindgen.workspace = true
 web-sys = { workspace = true, features = [
+    "Document",
     "Element",
     "HtmlElement",
+    "HtmlInputElement",
     "NodeList",
+    "Window",
 ] }
+
+[dev-dependencies]
+wasm-bindgen-test.workspace = true
