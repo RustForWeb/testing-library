@@ -10,6 +10,7 @@ mod types;
 mod util;
 
 pub use config::{configure, get_config};
+pub use error::QueryError;
 pub use get_node_text::*;
 pub use get_queries_for_element::*;
 pub use matches::get_default_normalizer;
