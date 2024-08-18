@@ -11,10 +11,15 @@ pub struct Config {
     pub test_id_attribute: String,
     // TODO
     pub computed_style_supports_pseudo_elements: bool,
+    /// Default value for the `hidden` option in `by_role` queries.
     pub default_hidden: bool,
+    /// Default value for the `ignore` option in `by_text` queries.
     pub default_ignore: String,
+    /// Flag to show the full error stack traces for async errors.
     pub show_original_stack_trace: bool,
+    /// Throw errors with suggestions for better queries. Opt in so off by default.
     pub throw_suggestions: bool,
+    // Called when `get_by` queries fail.
     pub get_element_error: Arc<GetElementErrorFn>,
 }
 
@@ -51,10 +56,15 @@ pub struct PartialConfig {
     pub test_id_attribute: Option<String>,
     // TODO
     pub computed_style_supports_pseudo_elements: Option<bool>,
+    /// Default value for the `hidden` option in `by_role` queries.
     pub default_hidden: Option<bool>,
+    /// Default value for the `ignore` option in `by_text` queries.
     pub default_ignore: Option<String>,
+    /// Flag to show the full error stack traces for async errors.
     pub show_original_stack_trace: Option<bool>,
+    /// Throw errors with suggestions for better queries. Opt in so off by default.
     pub throw_suggestions: Option<bool>,
+    // Called when `get_by` queries fail.
     pub get_element_error: Option<Arc<GetElementErrorFn>>,
 }
 
