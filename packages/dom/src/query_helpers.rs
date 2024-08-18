@@ -1,11 +1,16 @@
-use web_sys::HtmlElement;
+use web_sys::{Element, HtmlElement};
 
 use crate::{
+    config::get_config,
     error::QueryError,
     matches::{fuzzy_matches, make_normalizer, matches},
     util::node_list_to_vec,
     Matcher, MatcherOptions, NormalizerOptions,
 };
+
+pub fn get_element_error(message: Option<String>, container: Element) -> QueryError {
+    (get_config().get_element_error)(message, container)
+}
 
 pub fn query_all_by_attribute(
     attribute: String,

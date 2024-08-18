@@ -11,4 +11,6 @@ pub enum QueryError {
     NoElements(String),
     #[error("{0}")]
     MultipleElements(String),
+    #[error("{0}")]
+    Element(String),
 }

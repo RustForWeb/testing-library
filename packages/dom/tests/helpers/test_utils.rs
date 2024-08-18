@@ -1,4 +1,9 @@
-use web_sys::{window, Document, Element};
+// TODO: remove
+#![allow(dead_code)]
+
+use testing_library_dom::{get_queries_for_element, BoundFunctions};
+use wasm_bindgen::JsCast;
+use web_sys::{window, Document, Element, HtmlElement};
 
 pub fn document() -> Document {
     window()
@@ -9,6 +14,7 @@ pub fn document() -> Document {
 
 pub struct RenderReturn {
     pub container: Element,
+    pub container_queries: BoundFunctions,
     pub rerender: Box<dyn Fn(&str) -> RenderReturn>,
 }
 
@@ -21,10 +27,12 @@ pub fn render(html: &str, container: Option<Element>) -> RenderReturn {
 
     container.set_inner_html(html);
 
-    // TODO: container_queries
+    let container_queries =
+        get_queries_for_element(container.clone().unchecked_into::<HtmlElement>());
 
     RenderReturn {
         container: container.clone(),
+        container_queries,
         rerender: Box::new(move |new_html| render(new_html, Some(container.clone()))),
     }
 }
