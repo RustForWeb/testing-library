@@ -1,15 +1,16 @@
 use regex::Regex;
-use web_sys::{Element, HtmlElement};
+use web_sys::HtmlElement;
 
 use crate::{
+    build_queries,
     error::QueryError,
     query_all_by_attribute,
     types::{Matcher, MatcherOptions},
 };
 
-pub fn query_all_by_alt_text(
-    container: HtmlElement,
-    alt: &Matcher,
+pub fn _query_all_by_alt_text<M: Into<Matcher>>(
+    container: &HtmlElement,
+    alt: M,
     options: MatcherOptions,
 ) -> Result<Vec<HtmlElement>, QueryError> {
     let valid_tag_regex = Regex::new(r"^(img|input|area|.+-.+)$").expect("Regex should be valid.");
@@ -22,10 +23,22 @@ pub fn query_all_by_alt_text(
     )
 }
 
-fn _get_multiple_error(_c: Option<Element>, alt: String) -> String {
-    format!("Found multiple elements with alt text: {alt}")
+fn get_multiple_error(_container: &HtmlElement, alt: Matcher) -> String {
+    format!("Found multiple elements with the alt text: {alt}")
 }
 
-fn _get_missing_error(_c: Option<Element>, alt: String) -> String {
-    format!("Unable to find an element with alt text: {alt}")
+fn get_missing_error(_container: &HtmlElement, alt: Matcher) -> String {
+    format!("Unable to find an element with the alt text: {alt}")
 }
+
+build_queries!(
+    _query_all_by_alt_text,
+    get_multiple_error,
+    get_missing_error,
+    alt_text
+);
+
+pub use internal::{
+    find_all_by_alt_text, find_by_alt_text, get_all_by_alt_text, get_by_alt_text,
+    query_all_by_alt_text, query_by_alt_text,
+};

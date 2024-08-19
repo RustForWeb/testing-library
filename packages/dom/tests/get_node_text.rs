@@ -1,10 +1,9 @@
 mod helpers;
 
-use helpers::test_utils::RenderReturn;
 use testing_library_dom::get_node_text;
 use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
 
-use self::helpers::test_utils::render;
+use self::helpers::test_utils::{render, RenderReturn};
 
 wasm_bindgen_test_configure!(run_in_browser);
 

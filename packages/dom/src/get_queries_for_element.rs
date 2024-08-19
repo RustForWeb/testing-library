@@ -1,8 +1,34 @@
 use web_sys::HtmlElement;
 
-pub struct BoundFunctions {}
+use crate::{
+    error::QueryError,
+    queries::{get_by_alt_text, query_by_alt_text},
+    types::{Matcher, MatcherOptions},
+};
 
-pub fn get_queries_for_element(_element: HtmlElement) -> BoundFunctions {
+pub struct BoundFunctions {
+    element: HtmlElement,
+}
+
+impl BoundFunctions {
+    pub fn query_by_alt_text<M: Into<Matcher>>(
+        &self,
+        alt: M,
+        options: MatcherOptions,
+    ) -> Result<Option<HtmlElement>, QueryError> {
+        query_by_alt_text(&self.element, alt, options)
+    }
+
+    pub fn get_by_alt_text<M: Into<Matcher>>(
+        &self,
+        alt: M,
+        options: MatcherOptions,
+    ) -> Result<Option<HtmlElement>, QueryError> {
+        get_by_alt_text(&self.element, alt, options)
+    }
+}
+
+pub fn get_queries_for_element(element: HtmlElement) -> BoundFunctions {
     // TODO
-    BoundFunctions {}
+    BoundFunctions { element }
 }

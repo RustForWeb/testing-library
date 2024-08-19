@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use regex::Regex;
 use web_sys::Element;
 
@@ -50,11 +52,11 @@ pub fn get_default_normalizer(
         trim,
         collapse_whitespace,
     }: DefaultNormalizerOptions,
-) -> Box<NormalizerFn> {
+) -> Rc<NormalizerFn> {
     let trim = trim.unwrap_or(true);
     let collapse_whitespace = collapse_whitespace.unwrap_or(true);
 
-    Box::new(move |text| {
+    Rc::new(move |text| {
         let mut normalized_text = text;
 
         if trim {
@@ -79,7 +81,7 @@ pub fn make_normalizer(
         collapse_whitespace,
         normalizer,
     }: NormalizerOptions,
-) -> Result<Box<NormalizerFn>, QueryError> {
+) -> Result<Rc<NormalizerFn>, QueryError> {
     if let Some(normalizer) = normalizer {
         if trim.is_some() || collapse_whitespace.is_some() {
             Err(QueryError::Configuration("\n\

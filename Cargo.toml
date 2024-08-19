@@ -10,6 +10,7 @@ repository = "https://github.com/RustForWeb/radix"
 version = "0.0.2"
 
 [workspace.dependencies]
+log = "0.4.22"
 regex = "1.10.6"
 thiserror = "1.0.63"
 web-sys = "0.3.70"
