@@ -2,6 +2,7 @@ mod config;
 mod error;
 mod get_node_text;
 mod get_queries_for_element;
+mod helpers;
 mod matches;
 mod pretty_dom;
 pub mod queries;

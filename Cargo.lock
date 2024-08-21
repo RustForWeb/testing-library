@@ -12,6 +12,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "ansi-style"
+version = "1.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "76f4e7e5cab3f073c5b74e264cd4059249411a0f767af2c3047f26c9271f6bc1"
+
+[[package]]
 name = "anstyle"
 version = "1.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -153,6 +159,16 @@ checksum = "41b740d195ed3166cd147c8047ec98db0e22ec019eb8eeb76d343b795304fb13"
 dependencies = [
  "predicates-core",
  "termtree",
+]
+
+[[package]]
+name = "pretty-format"
+version = "0.0.2"
+dependencies = [
+ "ansi-style",
+ "thiserror",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]

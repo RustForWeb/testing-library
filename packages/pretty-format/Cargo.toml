@@ -1,0 +1,22 @@
+[package]
+name = "pretty-format"
+description = "Rust port of pretty-format."
+
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+ansi-style = "1.2.1"
+thiserror.workspace = true
+wasm-bindgen.workspace = true
+web-sys = { workspace = true, features = [
+    "Document",
+    "Element",
+    "HtmlElement",
+    "HtmlInputElement",
+    "NodeList",
+    "Window",
+] }

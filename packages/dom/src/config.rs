@@ -15,7 +15,7 @@ static CONFIG: LazyLock<Arc<Mutex<Config>>> = LazyLock::new(|| {
         show_original_stack_trace: false,
         throw_suggestions: false,
         get_element_error: Arc::new(|message, container| {
-            let prettified_dom = pretty_dom(Some(container));
+            let prettified_dom = pretty_dom(Some(container.into()), None);
 
             let default_ignore = {
                 let config = CONFIG.lock().expect("Config mutex should be acquired.");
