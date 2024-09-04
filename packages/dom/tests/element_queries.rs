@@ -117,6 +117,18 @@ fn get_throws_a_useful_error_message() -> Result<(), QueryError> {
         )),
         container_queries.get_by_display_value("LucyRicardo", MatcherOptions::default())
     );
+    assert_eq!(
+        Err(QueryError::Element(
+            "Unable to find an element with the title: LucyRicardo\n\
+            \n\
+            Ignored nodes: comments, script, style\n\
+            <div>\n\
+            <div />\n\
+            </div>"
+                .into()
+        )),
+        container_queries.get_by_title("LucyRicardo", MatcherOptions::default())
+    );
 
     after_each();
 
