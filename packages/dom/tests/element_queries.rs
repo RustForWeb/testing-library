@@ -44,6 +44,9 @@ fn query_can_return_none() -> Result<(), QueryError> {
     } = render("<div />", None);
 
     assert!(container_queries
+        .query_by_test_id("LucyRicardo", MatcherOptions::default())?
+        .is_none());
+    assert!(container_queries
         .query_by_display_value("LucyRicardo", MatcherOptions::default())?
         .is_none());
     assert!(container_queries
@@ -77,6 +80,18 @@ fn get_throws_a_useful_error_message() -> Result<(), QueryError> {
                 .into()
         )),
         container_queries.get_by_placeholder_text("LucyRicardo", MatcherOptions::default())
+    );
+    assert_eq!(
+        Err(QueryError::Element(
+            "Unable to find an element by: [data-test-id=\"LucyRicardo\"]\n\
+            \n\
+            Ignored nodes: comments, script, style\n\
+            <div>\n\
+            <div />\n\
+            </div>"
+                .into()
+        )),
+        container_queries.get_by_test_id("LucyRicardo", MatcherOptions::default())
     );
     assert_eq!(
         Err(QueryError::Element(
