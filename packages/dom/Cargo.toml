@@ -18,8 +18,12 @@ wasm-bindgen.workspace = true
 web-sys = { workspace = true, features = [
     "Document",
     "Element",
+    "HtmlCollection",
     "HtmlElement",
     "HtmlInputElement",
+    "HtmlOptionElement",
+    "HtmlOptionsCollection",
+    "HtmlSelectElement",
     "NodeList",
     "Window",
 ] }
