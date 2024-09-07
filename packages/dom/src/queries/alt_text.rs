@@ -4,7 +4,7 @@ use web_sys::HtmlElement;
 use crate::{
     build_queries,
     error::QueryError,
-    query_all_by_attribute,
+    query_helpers::query_all_by_attribute,
     types::{Matcher, MatcherOptions},
 };
 
@@ -23,19 +23,26 @@ pub fn _query_all_by_alt_text<M: Into<Matcher>>(
     )
 }
 
-fn get_multiple_error(_container: &HtmlElement, alt: Matcher) -> String {
-    format!("Found multiple elements with the alt text: {alt}")
+fn get_multiple_error(_container: &HtmlElement, alt: Matcher) -> Result<String, QueryError> {
+    Ok(format!("Found multiple elements with the alt text: {alt}"))
 }
 
-fn get_missing_error(_container: &HtmlElement, alt: Matcher) -> String {
-    format!("Unable to find an element with the alt text: {alt}")
+fn get_missing_error(
+    _container: &HtmlElement,
+    alt: Matcher,
+    _options: MatcherOptions,
+) -> Result<String, QueryError> {
+    Ok(format!(
+        "Unable to find an element with the alt text: {alt}"
+    ))
 }
 
 build_queries!(
     _query_all_by_alt_text,
     get_multiple_error,
     get_missing_error,
-    alt_text
+    alt_text,
+    crate::types::MatcherOptions
 );
 
 pub use internal::{

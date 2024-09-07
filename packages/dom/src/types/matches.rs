@@ -78,6 +78,93 @@ pub struct MatcherOptions {
     pub suggest: Option<bool>,
 }
 
+impl MatcherOptions {
+    pub fn exact(mut self, value: bool) -> Self {
+        self.exact = Some(value);
+        self
+    }
+
+    pub fn trim(mut self, value: bool) -> Self {
+        self.trim = Some(value);
+        self
+    }
+
+    pub fn collapse_whitespace(mut self, value: bool) -> Self {
+        self.collapse_whitespace = Some(value);
+        self
+    }
+
+    pub fn normalizer(mut self, value: Rc<NormalizerFn>) -> Self {
+        self.normalizer = Some(value);
+        self
+    }
+
+    pub fn suggest(mut self, value: bool) -> Self {
+        self.suggest = Some(value);
+        self
+    }
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub enum Ignore {
+    False,
+    String(String),
+}
+
+impl From<String> for Ignore {
+    fn from(value: String) -> Self {
+        Ignore::String(value)
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct SelectorMatcherOptions {
+    pub exact: Option<bool>,
+    pub trim: Option<bool>,
+    pub collapse_whitespace: Option<bool>,
+    pub normalizer: Option<Rc<NormalizerFn>>,
+    pub suggest: Option<bool>,
+    pub selector: Option<String>,
+    pub ignore: Option<Ignore>,
+}
+
+impl SelectorMatcherOptions {
+    pub fn exact(mut self, value: bool) -> Self {
+        self.exact = Some(value);
+        self
+    }
+
+    pub fn trim(mut self, value: bool) -> Self {
+        self.trim = Some(value);
+        self
+    }
+
+    pub fn collapse_whitespace(mut self, value: bool) -> Self {
+        self.collapse_whitespace = Some(value);
+        self
+    }
+
+    pub fn normalizer(mut self, value: Rc<NormalizerFn>) -> Self {
+        self.normalizer = Some(value);
+        self
+    }
+
+    pub fn suggest(mut self, value: bool) -> Self {
+        self.suggest = Some(value);
+        self
+    }
+
+    pub fn selector(mut self, value: String) -> Self {
+        self.selector = Some(value);
+        self
+    }
+
+    pub fn ignore(mut self, value: Ignore) -> Self {
+        self.ignore = Some(value);
+        self
+    }
+}
+
 #[derive(Default)]
 pub struct DefaultNormalizerOptions {
     pub trim: Option<bool>,

@@ -4,11 +4,10 @@ use web_sys::{Element, HtmlElement};
 use crate::{
     build_queries,
     error::QueryError,
-    get_node_text,
+    get_node_text::get_node_text,
     matches::{fuzzy_matches, make_normalizer, matches},
-    types::{Matcher, MatcherOptions},
+    types::{Matcher, MatcherOptions, NormalizerOptions},
     util::node_list_to_vec,
-    NormalizerOptions,
 };
 
 fn is_svg_title(node: &HtmlElement) -> bool {
@@ -58,19 +57,24 @@ pub fn _query_all_by_title<M: Into<Matcher>>(
     .collect())
 }
 
-fn get_multiple_error(_container: &HtmlElement, title: Matcher) -> String {
-    format!("Found multiple elements with the title: {title}")
+fn get_multiple_error(_container: &HtmlElement, title: Matcher) -> Result<String, QueryError> {
+    Ok(format!("Found multiple elements with the title: {title}"))
 }
 
-fn get_missing_error(_container: &HtmlElement, title: Matcher) -> String {
-    format!("Unable to find an element with the title: {title}")
+fn get_missing_error(
+    _container: &HtmlElement,
+    title: Matcher,
+    _options: MatcherOptions,
+) -> Result<String, QueryError> {
+    Ok(format!("Unable to find an element with the title: {title}"))
 }
 
 build_queries!(
     _query_all_by_title,
     get_multiple_error,
     get_missing_error,
-    title
+    title,
+    crate::types::MatcherOptions
 );
 
 pub use internal::{

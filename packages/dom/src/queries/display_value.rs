@@ -4,11 +4,10 @@ use web_sys::{HtmlElement, HtmlInputElement, HtmlOptionElement, HtmlSelectElemen
 use crate::{
     build_queries,
     error::QueryError,
-    get_node_text,
+    get_node_text::get_node_text,
     matches::{fuzzy_matches, make_normalizer, matches},
-    types::{Matcher, MatcherOptions},
+    types::{Matcher, MatcherOptions, NormalizerOptions},
     util::{html_collection_to_vec, node_list_to_vec},
-    NormalizerOptions,
 };
 
 pub fn _query_all_by_display_value<M: Into<Matcher>>(
@@ -60,19 +59,28 @@ pub fn _query_all_by_display_value<M: Into<Matcher>>(
     .collect())
 }
 
-fn get_multiple_error(_container: &HtmlElement, value: Matcher) -> String {
-    format!("Found multiple elements with the display value: {value}")
+fn get_multiple_error(_container: &HtmlElement, value: Matcher) -> Result<String, QueryError> {
+    Ok(format!(
+        "Found multiple elements with the display value: {value}"
+    ))
 }
 
-fn get_missing_error(_container: &HtmlElement, value: Matcher) -> String {
-    format!("Unable to find an element with the display value: {value}")
+fn get_missing_error(
+    _container: &HtmlElement,
+    value: Matcher,
+    _options: MatcherOptions,
+) -> Result<String, QueryError> {
+    Ok(format!(
+        "Unable to find an element with the display value: {value}"
+    ))
 }
 
 build_queries!(
     _query_all_by_display_value,
     get_multiple_error,
     get_missing_error,
-    display_value
+    display_value,
+    crate::types::MatcherOptions
 );
 
 pub use internal::{
