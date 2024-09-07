@@ -3,8 +3,7 @@ use web_sys::HtmlElement;
 use crate::{
     error::QueryError,
     queries::*,
-    types::{Matcher, MatcherOptions, WaitForOptions},
-    SelectorMatcherOptions,
+    types::{Matcher, MatcherOptions, SelectorMatcherOptions, WaitForOptions},
 };
 
 pub fn get_queries_for_element(element: HtmlElement) -> BoundFunctions {
