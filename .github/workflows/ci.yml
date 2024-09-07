@@ -27,6 +27,9 @@ jobs:
                   cache-on-failure: true
                   save-if: ${{ github.ref == 'refs/heads/main' }}
 
+            - name: Install wasm-pack
+              run: cargo install wasm-pack
+
             - name: Check formatting
               run: cargo fmt --all --check
 
