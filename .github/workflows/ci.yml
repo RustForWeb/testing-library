@@ -35,3 +35,7 @@ jobs:
 
             - name: Test
               run: cargo test --all-features
+
+            - name: Test in Browser
+              run: wasm-pack test --headless --release --chrome --firefox
+              working-directory: packages/dom
