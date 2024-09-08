@@ -17,7 +17,9 @@ regex.workspace = true
 thiserror.workspace = true
 wasm-bindgen.workspace = true
 web-sys = { workspace = true, features = [
+    "Comment",
     "Document",
+    "DocumentFragment",
     "Element",
     "HtmlCollection",
     "HtmlElement",
@@ -26,6 +28,7 @@ web-sys = { workspace = true, features = [
     "HtmlOptionsCollection",
     "HtmlSelectElement",
     "NodeList",
+    "Text",
     "Window",
 ] }
 

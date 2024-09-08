@@ -1,34 +1,46 @@
 use std::rc::Rc;
 
-use ansi_style::{Style, StyleBuilder};
+use ansi_style::Color;
 use wasm_bindgen::JsValue;
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Colors {
-    pub comment: Style,
-    pub content: Style,
-    pub prop: Style,
-    pub tag: Style,
-    pub value: Style,
+    pub comment: Color,
+    pub content: Color,
+    pub prop: Color,
+    pub tag: Color,
+    pub value: Color,
+}
+
+impl Default for Colors {
+    fn default() -> Self {
+        Self {
+            comment: Color::Any,
+            content: Color::Any,
+            prop: Color::Any,
+            tag: Color::Any,
+            value: Color::Any,
+        }
+    }
 }
 
 #[derive(Clone, Debug)]
 pub struct Theme {
-    pub comment: Style,
-    pub content: Style,
-    pub prop: Style,
-    pub tag: Style,
-    pub value: Style,
+    pub comment: Color,
+    pub content: Color,
+    pub prop: Color,
+    pub tag: Color,
+    pub value: Color,
 }
 
 impl Default for Theme {
     fn default() -> Self {
         Self {
-            comment: StyleBuilder::new().black_bright().build(),
-            content: StyleBuilder::new().build(),
-            prop: StyleBuilder::new().yellow().build(),
-            tag: StyleBuilder::new().cyan().build(),
-            value: StyleBuilder::new().green().build(),
+            comment: Color::BlackBright,
+            content: Color::Any,
+            prop: Color::Yellow,
+            tag: Color::Cyan,
+            value: Color::Green,
         }
     }
 }
