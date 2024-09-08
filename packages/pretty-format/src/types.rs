@@ -1,18 +1,7 @@
 use std::rc::Rc;
 
 use ansi_style::{Style, StyleBuilder};
-
-// TODO: consider replacing this with JsValue, so code can match the JS implementation
-#[derive(Debug)]
-pub enum PrettyFormatValue {
-    Bool(bool),
-}
-
-impl From<bool> for PrettyFormatValue {
-    fn from(value: bool) -> Self {
-        Self::Bool(value)
-    }
-}
+use wasm_bindgen::JsValue;
 
 #[derive(Debug, Default)]
 pub struct Colors {
@@ -44,7 +33,7 @@ impl Default for Theme {
     }
 }
 
-pub type Refs = Vec<PrettyFormatValue>;
+pub type Refs = Vec<JsValue>;
 
 pub type CompareKeys = Rc<dyn Fn(String, String) -> usize>;
 
@@ -58,11 +47,78 @@ pub struct PrettyFormatOptions {
     pub max_depth: Option<usize>,
     pub max_width: Option<usize>,
     pub min: Option<bool>,
-    // pub print_basic_prototype: Option<bool>,
+    pub print_basic_prototype: Option<bool>,
     pub print_function_name: Option<bool>,
     pub theme: Option<Theme>,
     pub compare_keys: Option<CompareKeys>,
     pub plugins: Option<Plugins>,
+}
+
+impl PrettyFormatOptions {
+    pub fn call_to_json(mut self, value: bool) -> Self {
+        self.call_to_json = Some(value);
+        self
+    }
+
+    pub fn escape_regex(mut self, value: bool) -> Self {
+        self.escape_regex = Some(value);
+        self
+    }
+
+    pub fn escape_string(mut self, value: bool) -> Self {
+        self.escape_string = Some(value);
+        self
+    }
+
+    pub fn highlight(mut self, value: bool) -> Self {
+        self.highlight = Some(value);
+        self
+    }
+
+    pub fn indent(mut self, value: usize) -> Self {
+        self.indent = Some(value);
+        self
+    }
+
+    pub fn max_depth(mut self, value: usize) -> Self {
+        self.max_depth = Some(value);
+        self
+    }
+
+    pub fn max_width(mut self, value: usize) -> Self {
+        self.max_width = Some(value);
+        self
+    }
+
+    pub fn min(mut self, value: bool) -> Self {
+        self.min = Some(value);
+        self
+    }
+
+    pub fn print_basic_prototype(mut self, value: bool) -> Self {
+        self.print_basic_prototype = Some(value);
+        self
+    }
+
+    pub fn print_function_name(mut self, value: bool) -> Self {
+        self.print_function_name = Some(value);
+        self
+    }
+
+    pub fn theme(mut self, value: Theme) -> Self {
+        self.theme = Some(value);
+        self
+    }
+
+    pub fn compare_keys(mut self, value: CompareKeys) -> Self {
+        self.compare_keys = Some(value);
+        self
+    }
+
+    pub fn plugins(mut self, value: Plugins) -> Self {
+        self.plugins = Some(value);
+        self
+    }
 }
 
 pub struct Config {
@@ -82,20 +138,20 @@ pub struct Config {
     pub spacing_outer: String,
 }
 
-pub type Printer = dyn Fn(PrettyFormatValue, Config, String, usize, Refs, Option<bool>) -> String;
+pub type Printer = dyn Fn(JsValue, Config, String, usize, Refs, Option<bool>) -> String;
 
 pub trait Plugin {
+    fn test(&self, val: &JsValue) -> bool;
+
     fn serialize(
         &self,
-        val: PrettyFormatValue,
+        val: &JsValue,
         config: Config,
         indentation: String,
         depth: usize,
         refs: Refs,
         printer: &Printer,
     ) -> String;
-
-    fn test(&self, val: &PrettyFormatValue) -> bool;
 }
 
 pub type Plugins = Vec<Rc<dyn Plugin>>;

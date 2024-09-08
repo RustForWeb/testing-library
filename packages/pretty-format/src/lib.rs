@@ -6,25 +6,25 @@ mod types;
 
 use std::rc::Rc;
 
-pub use error::PrettyFormatError;
-pub use types::{Config, PrettyFormatOptions, PrettyFormatValue};
+use wasm_bindgen::JsValue;
 
-use types::{Colors, Plugin, Plugins, Refs};
+pub use error::PrettyFormatError;
+pub use types::{Config, Plugin, PrettyFormatOptions, Printer, Refs};
+
+use types::{Colors, Plugins};
 
 pub fn print_basic_value(
-    val: &PrettyFormatValue,
+    val: &JsValue,
     print_function_name: bool,
     escape_regex: bool,
     escape_string: bool,
 ) -> Option<String> {
-    match val {
-        PrettyFormatValue::Bool(val) => Some(format!("{val}")),
-        // _ => None,
-    }
+    // TODO
+    None
 }
 
 pub fn print_complex_value(
-    val: &PrettyFormatValue,
+    val: &JsValue,
     config: Config,
     indentation: String,
     depth: usize,
@@ -36,7 +36,7 @@ pub fn print_complex_value(
 
 fn print_plugin(
     plugin: Rc<dyn Plugin>,
-    val: PrettyFormatValue,
+    val: &JsValue,
     config: Config,
     indentation: String,
     depth: usize,
@@ -45,12 +45,12 @@ fn print_plugin(
     plugin.serialize(val, config, indentation, depth, refs, &printer)
 }
 
-fn find_plugin(plugins: &Plugins, val: &PrettyFormatValue) -> Option<Rc<dyn Plugin>> {
+fn find_plugin(plugins: &Plugins, val: &JsValue) -> Option<Rc<dyn Plugin>> {
     plugins.iter().find(|plugin| plugin.test(val)).cloned()
 }
 
 fn printer(
-    val: PrettyFormatValue,
+    val: JsValue,
     config: Config,
     indentation: String,
     depth: usize,
@@ -134,14 +134,11 @@ fn create_indent(indent: usize) -> String {
     " ".repeat(indent + 1)
 }
 
-pub fn format(
-    val: PrettyFormatValue,
-    options: PrettyFormatOptions,
-) -> Result<String, PrettyFormatError> {
+pub fn format(val: &JsValue, options: PrettyFormatOptions) -> Result<String, PrettyFormatError> {
     validate_options(&options)?;
 
     if let Some(plugins) = &options.plugins {
-        if let Some(plugin) = find_plugin(plugins, &val) {
+        if let Some(plugin) = find_plugin(plugins, val) {
             return Ok(print_plugin(
                 plugin,
                 val,
@@ -154,7 +151,7 @@ pub fn format(
     }
 
     let basic_result = print_basic_value(
-        &val,
+        val,
         get_print_function_name(&options),
         get_escape_regex(&options),
         get_escape_string(&options),
@@ -163,7 +160,7 @@ pub fn format(
         Ok(basic_result)
     } else {
         Ok(print_complex_value(
-            &val,
+            val,
             get_config(options),
             "".into(),
             0,

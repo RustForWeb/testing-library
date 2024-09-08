@@ -12,11 +12,4 @@ version.workspace = true
 ansi-style = "1.2.1"
 thiserror.workspace = true
 wasm-bindgen.workspace = true
-web-sys = { workspace = true, features = [
-    "Document",
-    "Element",
-    "HtmlElement",
-    "HtmlInputElement",
-    "NodeList",
-    "Window",
-] }
+web-sys = { workspace = true, features = [] }

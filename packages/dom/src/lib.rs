@@ -1,4 +1,5 @@
 mod config;
+mod dom_element_filter;
 mod error;
 mod get_node_text;
 mod get_queries_for_element;

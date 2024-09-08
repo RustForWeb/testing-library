@@ -6,8 +6,8 @@ resolver = "2"
 authors = ["Rust For Web <info@rustforweb.org>"]
 edition = "2021"
 license = "MIT"
-repository = "https://github.com/RustForWeb/radix"
-version = "0.0.2"
+repository = "https://github.com/RustForWeb/testing-library"
+version = "0.0.1"
 
 [workspace.dependencies]
 log = "0.4.22"
