@@ -1,27 +1,43 @@
 use std::rc::Rc;
 
-use ansi_style::Color;
 use wasm_bindgen::JsValue;
 
-#[derive(Debug)]
+#[derive(Clone, Debug, Default)]
+pub struct Color {
+    open: String,
+    close: String,
+}
+
+impl Color {
+    pub fn open(&self) -> String {
+        self.open.clone()
+    }
+
+    pub fn close(&self) -> String {
+        self.close.clone()
+    }
+
+    pub fn paint(&self, s: &str) -> String {
+        format!("{}{}{}", self.open(), s, self.close())
+    }
+}
+
+impl From<ansi_style::Color> for Color {
+    fn from(value: ansi_style::Color) -> Self {
+        Color {
+            open: value.open(),
+            close: value.close().into(),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default)]
 pub struct Colors {
     pub comment: Color,
     pub content: Color,
     pub prop: Color,
     pub tag: Color,
     pub value: Color,
-}
-
-impl Default for Colors {
-    fn default() -> Self {
-        Self {
-            comment: Color::Any,
-            content: Color::Any,
-            prop: Color::Any,
-            tag: Color::Any,
-            value: Color::Any,
-        }
-    }
 }
 
 #[derive(Clone, Debug)]
@@ -36,11 +52,11 @@ pub struct Theme {
 impl Default for Theme {
     fn default() -> Self {
         Self {
-            comment: Color::BlackBright,
-            content: Color::Any,
-            prop: Color::Yellow,
-            tag: Color::Cyan,
-            value: Color::Green,
+            comment: ansi_style::Color::BlackBright.into(),
+            content: Color::default(),
+            prop: ansi_style::Color::Yellow.into(),
+            tag: ansi_style::Color::Cyan.into(),
+            value: ansi_style::Color::Green.into(),
         }
     }
 }
@@ -150,7 +166,7 @@ pub struct Config {
     pub spacing_outer: String,
 }
 
-pub type Printer = dyn Fn(JsValue, Config, String, usize, Refs, Option<bool>) -> String;
+pub type Printer = dyn Fn(&JsValue, &Config, String, usize, Refs, Option<bool>) -> String;
 
 pub trait Plugin {
     fn test(&self, val: &JsValue) -> bool;
@@ -158,7 +174,7 @@ pub trait Plugin {
     fn serialize(
         &self,
         val: &JsValue,
-        config: Config,
+        config: &Config,
         indentation: String,
         depth: usize,
         refs: Refs,

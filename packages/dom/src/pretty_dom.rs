@@ -2,9 +2,9 @@ use std::rc::Rc;
 
 use pretty_format::PrettyFormatOptions;
 use wasm_bindgen::{JsCast, JsValue};
-use web_sys::{Document, Element};
+use web_sys::{Document, Element, Node};
 
-use crate::{dom_element_filter::DomElementFilter, helpers::get_document};
+use crate::{dom_element_filter::DomElementFilter, get_config, helpers::get_document};
 
 pub enum DocumentOrElement {
     Document(Document),
@@ -25,7 +25,18 @@ impl From<Element> for DocumentOrElement {
 
 fn should_highlight() -> bool {
     // TODO
-    true
+
+    // Don't colorize in non-node environments (e.g. browsers).
+    false
+}
+
+fn filter_comments_and_default_ignore_tags_tags(node: &Node) -> bool {
+    node.node_type() != Node::COMMENT_NODE
+        && (node.node_type() != Node::ELEMENT_NODE
+            || !node
+                .unchecked_ref::<Element>()
+                .matches(&get_config().default_ignore)
+                .unwrap_or(false))
 }
 
 pub fn pretty_dom(dom: Option<DocumentOrElement>, max_length: Option<usize>) -> String {
@@ -44,11 +55,14 @@ pub fn pretty_dom(dom: Option<DocumentOrElement>, max_length: Option<usize>) -> 
         DocumentOrElement::Element(element) => element.unchecked_into(),
     };
 
+    // TODO: accept as option
+    let filter_node = filter_comments_and_default_ignore_tags_tags;
+
     let debug_content = pretty_format::format(
         &dom,
         // TODO: pass options
         PrettyFormatOptions::default()
-            .plugins(vec![Rc::new(DomElementFilter::new())])
+            .plugins(vec![Rc::new(DomElementFilter::new(Box::new(filter_node)))])
             .print_function_name(false)
             .highlight(should_highlight()),
     )

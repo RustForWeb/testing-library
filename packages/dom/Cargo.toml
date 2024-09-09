@@ -17,6 +17,7 @@ regex.workspace = true
 thiserror.workspace = true
 wasm-bindgen.workspace = true
 web-sys = { workspace = true, features = [
+    "Attr",
     "Comment",
     "Document",
     "DocumentFragment",
@@ -27,11 +28,13 @@ web-sys = { workspace = true, features = [
     "HtmlOptionElement",
     "HtmlOptionsCollection",
     "HtmlSelectElement",
+    "NamedNodeMap",
     "NodeList",
     "Text",
     "Window",
 ] }
 
 [dev-dependencies]
-wasm-bindgen-test.workspace = true
+indoc = "2.0.5"
 mockall = "0.13.0"
+wasm-bindgen-test.workspace = true

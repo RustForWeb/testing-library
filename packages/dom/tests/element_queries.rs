@@ -2,6 +2,7 @@ mod helpers;
 
 use std::sync::{Arc, LazyLock, Mutex};
 
+use indoc::indoc;
 use testing_library_dom::{
     configure, ConfigFnOrPartial, MatcherOptions, PartialConfig, QueryError, SelectorMatcherOptions,
 };
@@ -64,8 +65,6 @@ fn query_can_return_none() -> Result<(), QueryError> {
     Ok(())
 }
 
-// TODO: enable test once pretty-dom is implemented
-#[ignore]
 #[wasm_bindgen_test]
 fn get_throws_a_useful_error_message() -> Result<(), QueryError> {
     before_each();
@@ -76,97 +75,105 @@ fn get_throws_a_useful_error_message() -> Result<(), QueryError> {
 
     assert_eq!(
         Err(QueryError::Element(
-            "Unable to find an element with the placeholder text: LucyRicardo\n\
-            \n\
-            Ignored nodes: comments, script, style\n\
-            <div>\n\
-              <div />\n\
-            </div>"
-                .into()
+            indoc! {"
+            Unable to find an element with the placeholder text: LucyRicardo
+
+            Ignored nodes: comments, script, style
+            <div>
+              <div />
+            </div>"}
+            .into()
         )),
         container_queries.get_by_placeholder_text("LucyRicardo", MatcherOptions::default())
     );
     assert_eq!(
         Err(QueryError::Element(
-            "Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.\n\
-            \n\
-            Ignored nodes: comments, script, style\n\
-            <div>\n\
-              <div />\n\
-            </div>"
-                .into()
+            indoc! {"
+            Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+            Ignored nodes: comments, script, style
+            <div>
+              <div />
+            </div>"}
+            .into()
         )),
         container_queries.get_by_text("LucyRicardo", SelectorMatcherOptions::default())
     );
     assert_eq!(
         Err(QueryError::Element(
-            "Unable to find an element with the text: Lucy Ricardo (normalized from 'Lucy      Ricardo'). This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.\n\
-            \n\
-            Ignored nodes: comments, script, style\n\
-            <div>\n\
-              <div />\n\
-            </div>"
-                .into()
+            indoc! {"
+            Unable to find an element with the text: Lucy Ricardo (normalized from 'Lucy      Ricardo'). This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+            Ignored nodes: comments, script, style
+            <div>
+              <div />
+            </div>"}
+            .into()
         )),
         container_queries.get_by_text("Lucy      Ricardo", SelectorMatcherOptions::default())
     );
     assert_eq!(
         Err(QueryError::Element(
-            "Unable to find an element with the text: LucyRicardo, which matches selector 'span'. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.\n\
-            \n\
-            Ignored nodes: comments, script, style\n\
-            <div>\n\
-              <div />\n\
-            </div>"
-                .into()
+            indoc! {"
+            Unable to find an element with the text: LucyRicardo, which matches selector 'span'. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+            Ignored nodes: comments, script, style
+            <div>
+              <div />
+            </div>"}
+            .into()
         )),
         container_queries.get_by_text("LucyRicardo", SelectorMatcherOptions::default().selector("span".into()))
     );
     assert_eq!(
         Err(QueryError::Element(
-            "Unable to find an element by: [data-test-id=\"LucyRicardo\"]\n\
-            \n\
-            Ignored nodes: comments, script, style\n\
-            <div>\n\
-              <div />\n\
-            </div>"
-                .into()
+            indoc! {"
+            Unable to find an element by: [data-testid=\"LucyRicardo\"]
+
+            Ignored nodes: comments, script, style
+            <div>
+              <div />
+            </div>"}
+            .into()
         )),
         container_queries.get_by_test_id("LucyRicardo", MatcherOptions::default())
     );
     assert_eq!(
         Err(QueryError::Element(
-            "Unable to find an element with the alt text: LucyRicardo\n\
-            \n\
-            Ignored nodes: comments, script, style\n\
-            <div>\n\
-              <div />\n\
-            </div>"
-                .into()
+            indoc! {"
+            Unable to find an element with the alt text: LucyRicardo
+
+            Ignored nodes: comments, script, style
+            <div>
+              <div />
+            </div>"}
+            .into()
         )),
         container_queries.get_by_alt_text("LucyRicardo", MatcherOptions::default())
     );
     assert_eq!(
         Err(QueryError::Element(
-            "Unable to find an element with the title: LucyRicardo\n\
-            \n\
-            Ignored nodes: comments, script, style\n\
-            <div>\n\
-              <div />\n\
-            </div>"
-                .into()
+            indoc! {"
+            Unable to find an element with the title: LucyRicardo
+
+            Ignored nodes: comments, script, style
+            <div>
+              <div />
+            </div>"}
+            .into()
         )),
         container_queries.get_by_title("LucyRicardo", MatcherOptions::default())
     );
     assert_eq!(
         Err(QueryError::Element(
-            "Unable to find an element with the display value: LucyRicardo\n\
-            \n\
-            Ignored nodes: comments, script, style\n\
-            <div>\n\
-              <div />\n\
-            </div>"
-                .into()
+            indoc! {"
+            Unable to find an element with the display value: LucyRicardo
+
+            Ignored nodes: comments, script, style
+            <div>
+              <div />
+            </div>"}
+            .into()
         )),
         container_queries.get_by_display_value("LucyRicardo", MatcherOptions::default())
     );

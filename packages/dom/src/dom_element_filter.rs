@@ -1,39 +1,88 @@
+use std::collections::HashMap;
+
 use pretty_format::{Config, Plugin, Printer, Refs};
 use regex::Regex;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{Comment, Element, Node, Text};
+
+use crate::util::{named_node_map_to_hashmap, node_list_to_vec};
 
 fn escape_html(text: String) -> String {
     text.replace('<', "&lt;").replace('>', "&gt;")
 }
 
 fn print_props(
-    _config: &Config,
-    _indentation: String,
-    _depth: usize,
-    _refs: &Refs,
-    _printer: &Printer,
+    attributes: HashMap<String, String>,
+    config: &Config,
+    indentation: String,
+    depth: usize,
+    refs: Refs,
+    printer: &Printer,
 ) -> String {
-    todo!()
+    let indentation_next = format!("{}{}", indentation, config.indent);
+
+    attributes
+        .into_iter()
+        .map(|(key, value)| {
+            let printed = printer(
+                &JsValue::from_str(&value),
+                config,
+                indentation_next.clone(),
+                depth,
+                refs.clone(),
+                None,
+            );
+
+            format!(
+                "{}{}{}={}",
+                config.spacing_inner,
+                indentation,
+                config.colors.prop.paint(&key),
+                config.colors.value.paint(&printed)
+            )
+        })
+        .collect::<Vec<_>>()
+        .join("")
 }
 
 fn print_children(
-    _config: &Config,
-    _indentation: String,
-    _depth: usize,
-    _refs: &Refs,
-    _printer: &Printer,
+    children: Vec<Node>,
+    config: &Config,
+    indentation: String,
+    depth: usize,
+    refs: Refs,
+    printer: &Printer,
 ) -> String {
-    todo!()
+    children
+        .into_iter()
+        .map(|child| {
+            let printed_child = printer(
+                child.unchecked_ref::<JsValue>(),
+                config,
+                indentation.clone(),
+                depth,
+                refs.clone(),
+                None,
+            );
+
+            if printed_child.is_empty() && child.node_type() != Node::TEXT_NODE {
+                // A plugin serialized this Node to '' meaning we should ignore it.
+                "".into()
+            } else {
+                format!("{}{}{}", config.spacing_outer, indentation, printed_child)
+            }
+        })
+        .collect::<Vec<_>>()
+        .join("")
 }
 
 fn print_text(text: String, config: &Config) -> String {
-    let content_color = config.colors.content;
+    let content_color = &config.colors.content;
     content_color.paint(&escape_html(text))
 }
 
 fn print_comment(text: String, config: &Config) -> String {
-    let comment_color = config.colors.comment;
+    let comment_color = &config.colors.comment;
     comment_color.paint(&format!("<!--{}-->", escape_html(text)))
 }
 
@@ -41,10 +90,10 @@ fn print_element(
     r#type: String,
     printed_props: String,
     printed_children: String,
-    config: Config,
+    config: &Config,
     indentation: String,
 ) -> String {
-    let tag_color = config.colors.tag;
+    let tag_color = &config.colors.tag;
 
     tag_color.paint(&format!(
         "<{}{}{}>",
@@ -82,7 +131,7 @@ fn print_element(
 }
 
 fn print_element_as_leaf(r#type: String, config: &Config) -> String {
-    let tag_color = config.colors.tag;
+    let tag_color = &config.colors.tag;
     format!(
         "{} …{}",
         tag_color.paint(&format!("<{}", r#type)),
@@ -123,11 +172,13 @@ fn node_is_fragment(node: &Node) -> bool {
     node.node_type() == Node::DOCUMENT_FRAGMENT_NODE
 }
 
-pub struct DomElementFilter {}
+pub struct DomElementFilter {
+    filter_node: Box<dyn Fn(&Node) -> bool>,
+}
 
 impl DomElementFilter {
-    pub fn new() -> Self {
-        Self {}
+    pub fn new(filter_node: Box<dyn Fn(&Node) -> bool>) -> Self {
+        Self { filter_node }
     }
 }
 
@@ -139,7 +190,7 @@ impl Plugin for DomElementFilter {
     fn serialize(
         &self,
         val: &JsValue,
-        config: Config,
+        config: &Config,
         indentation: String,
         depth: usize,
         refs: Refs,
@@ -148,11 +199,11 @@ impl Plugin for DomElementFilter {
         let node: &Node = val.unchecked_ref();
 
         if node_is_text(node) {
-            return print_text(node.unchecked_ref::<Text>().data(), &config);
+            return print_text(node.unchecked_ref::<Text>().data(), config);
         }
 
         if node_is_comment(node) {
-            return print_comment(node.unchecked_ref::<Comment>().data(), &config);
+            return print_comment(node.unchecked_ref::<Comment>().data(), config);
         }
 
         let r#type = if node_is_fragment(node) {
@@ -163,25 +214,32 @@ impl Plugin for DomElementFilter {
 
         let depth = depth + 1;
         if depth > config.max_depth {
-            return print_element_as_leaf(r#type, &config);
+            return print_element_as_leaf(r#type, config);
         }
 
         print_element(
             r#type,
             print_props(
-                // TODO: props,
-                &config,
+                if node_is_fragment(node) {
+                    HashMap::new()
+                } else {
+                    named_node_map_to_hashmap(node.unchecked_ref::<Element>().attributes())
+                },
+                config,
                 format!("{}{}", indentation, &config.indent),
                 depth,
-                &refs,
+                refs.clone(),
                 printer,
             ),
             print_children(
-                // TODO: children,
-                &config,
+                node_list_to_vec(node.child_nodes())
+                    .into_iter()
+                    .filter(&self.filter_node)
+                    .collect(),
+                config,
                 format!("{}{}", indentation, &config.indent),
                 depth,
-                &refs,
+                refs.clone(),
                 printer,
             ),
             config,

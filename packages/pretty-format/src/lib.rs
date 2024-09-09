@@ -6,12 +6,33 @@ mod types;
 
 use std::rc::Rc;
 
-use wasm_bindgen::JsValue;
+use wasm_bindgen::{JsCast, JsValue};
 
 pub use error::PrettyFormatError;
 pub use types::{Config, Plugin, PrettyFormatOptions, Printer, Refs};
 
 use types::{Colors, Plugins};
+use web_sys::js_sys::{BigInt, Number, Object};
+
+fn print_number(val: &Number) -> String {
+    if Object::is(val, &JsValue::from_f64(-0.0)) {
+        "-0".into()
+    } else {
+        val.to_string(10)
+            .expect("Number should be formatted as string.")
+            .into()
+    }
+}
+
+fn print_big_int(val: &BigInt) -> String {
+    format!(
+        "{}n",
+        String::from(
+            val.to_string(10)
+                .expect("Number should be formatted as string.")
+        )
+    )
+}
 
 pub fn print_basic_value(
     val: &JsValue,
@@ -19,25 +40,60 @@ pub fn print_basic_value(
     escape_regex: bool,
     escape_string: bool,
 ) -> Option<String> {
-    // TODO
-    None
+    if *val == JsValue::TRUE {
+        return Some("true".into());
+    }
+    if *val == JsValue::FALSE {
+        return Some("false".into());
+    }
+    if val.is_undefined() {
+        return Some("undefined".into());
+    }
+    if val.is_null() {
+        return Some("null".into());
+    }
+
+    let type_of = val.js_typeof();
+
+    if type_of == "number" {
+        return Some(print_number(val.unchecked_ref::<Number>()));
+    }
+    if type_of == "bigint" {
+        return Some(print_big_int(val.unchecked_ref::<BigInt>()));
+    }
+    if type_of == "string" {
+        if escape_string {
+            return Some(
+                val.as_string()
+                    .expect("Value should be a string.")
+                    .replace('"', "\\\"")
+                    .replace('\\', "\\\\"),
+            );
+        }
+        return Some(format!(
+            "\"{}\"",
+            val.as_string().expect("Value should be a string.")
+        ));
+    }
+
+    todo!("print basic value {:?}", val)
 }
 
 pub fn print_complex_value(
     val: &JsValue,
-    config: Config,
+    config: &Config,
     indentation: String,
     depth: usize,
     refs: Refs,
     has_called_to_json: Option<bool>,
 ) -> String {
-    "".into()
+    todo!("print complex value {:?}", val)
 }
 
 fn print_plugin(
     plugin: Rc<dyn Plugin>,
     val: &JsValue,
-    config: Config,
+    config: &Config,
     indentation: String,
     depth: usize,
     refs: Refs,
@@ -50,14 +106,27 @@ fn find_plugin(plugins: &Plugins, val: &JsValue) -> Option<Rc<dyn Plugin>> {
 }
 
 fn printer(
-    val: JsValue,
-    config: Config,
+    val: &JsValue,
+    config: &Config,
     indentation: String,
     depth: usize,
     refs: Refs,
     has_called_to_json: Option<bool>,
 ) -> String {
-    "".into()
+    if let Some(plugin) = find_plugin(&config.plugins, val) {
+        return print_plugin(plugin, val, config, indentation, depth, refs);
+    }
+
+    if let Some(basic_result) = print_basic_value(
+        val,
+        config.print_function_name,
+        config.escape_regex,
+        config.escape_string,
+    ) {
+        return basic_result;
+    }
+
+    print_complex_value(val, config, indentation, depth, refs, has_called_to_json)
 }
 
 fn validate_options(options: &PrettyFormatOptions) -> Result<(), PrettyFormatError> {
@@ -131,7 +200,7 @@ fn get_config(options: PrettyFormatOptions) -> Config {
 }
 
 fn create_indent(indent: usize) -> String {
-    " ".repeat(indent + 1)
+    " ".repeat(indent)
 }
 
 pub fn format(val: &JsValue, options: PrettyFormatOptions) -> Result<String, PrettyFormatError> {
@@ -142,7 +211,7 @@ pub fn format(val: &JsValue, options: PrettyFormatOptions) -> Result<String, Pre
             return Ok(print_plugin(
                 plugin,
                 val,
-                get_config(options),
+                &get_config(options),
                 "".into(),
                 0,
                 vec![],
@@ -161,7 +230,7 @@ pub fn format(val: &JsValue, options: PrettyFormatOptions) -> Result<String, Pre
     } else {
         Ok(print_complex_value(
             val,
-            get_config(options),
+            &get_config(options),
             "".into(),
             0,
             vec![],
