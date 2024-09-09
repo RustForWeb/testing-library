@@ -1,6 +1,3 @@
-// TODO: remove
-#![allow(dead_code, unused)]
-
 mod error;
 mod types;
 
@@ -36,8 +33,8 @@ fn print_big_int(val: &BigInt) -> String {
 
 pub fn print_basic_value(
     val: &JsValue,
-    print_function_name: bool,
-    escape_regex: bool,
+    _print_function_name: bool,
+    _escape_regex: bool,
     escape_string: bool,
 ) -> Option<String> {
     if *val == JsValue::TRUE {
@@ -81,11 +78,11 @@ pub fn print_basic_value(
 
 pub fn print_complex_value(
     val: &JsValue,
-    config: &Config,
-    indentation: String,
-    depth: usize,
-    refs: Refs,
-    has_called_to_json: Option<bool>,
+    _config: &Config,
+    _indentation: String,
+    _depth: usize,
+    _refs: Refs,
+    _has_called_to_json: Option<bool>,
 ) -> String {
     todo!("print complex value {:?}", val)
 }
