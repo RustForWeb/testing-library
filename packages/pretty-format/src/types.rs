@@ -53,7 +53,11 @@ impl Default for Theme {
     fn default() -> Self {
         Self {
             comment: ansi_style::Color::BlackBright.into(),
-            content: Color::default(),
+            content: Color {
+                // Reset
+                open: "\x1B[0m".into(),
+                close: "\x1B[0m".into(),
+            },
             prop: ansi_style::Color::Yellow.into(),
             tag: ansi_style::Color::Cyan.into(),
             value: ansi_style::Color::Green.into(),
