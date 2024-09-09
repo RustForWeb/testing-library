@@ -40,7 +40,13 @@ fn filter_comments_and_default_ignore_tags_tags(node: &Node) -> bool {
 }
 
 pub fn pretty_dom(dom: Option<DocumentOrElement>, max_length: Option<usize>) -> String {
-    let dom = dom.unwrap_or_else(|| get_document().into());
+    let dom = dom.unwrap_or_else(|| {
+        get_document()
+            .body()
+            .expect("Body should exist.")
+            .unchecked_into::<Element>()
+            .into()
+    });
     let max_length = max_length.unwrap_or(7000);
 
     if max_length == 0 {
