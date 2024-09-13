@@ -125,3 +125,28 @@ pub fn get_labels(
             .collect()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use wasm_bindgen::JsCast;
+    use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
+    use web_sys::{HtmlInputElement, HtmlLabelElement};
+
+    use crate::helpers::get_document;
+
+    use super::get_real_labels;
+
+    wasm_bindgen_test_configure!(run_in_browser);
+
+    #[wasm_bindgen_test]
+    fn hidden_inputs_are_not_labelable() {
+        let element = get_document()
+            .create_element("input")
+            .expect("Element should be created.")
+            .unchecked_into::<HtmlInputElement>();
+        element.set_type("hidden");
+
+        let expected: Vec<HtmlLabelElement> = vec![];
+        assert_eq!(expected, get_real_labels(&element));
+    }
+}
