@@ -48,6 +48,9 @@ fn query_can_return_none() -> Result<(), QueryError> {
         .query_by_test_id("LucyRicardo", MatcherOptions::default())?
         .is_none());
     assert!(container_queries
+        .query_by_label_text("LucyRicardo", SelectorMatcherOptions::default())?
+        .is_none());
+    assert!(container_queries
         .query_by_display_value("LucyRicardo", MatcherOptions::default())?
         .is_none());
     assert!(container_queries
@@ -73,6 +76,19 @@ fn get_throws_a_useful_error_message() -> Result<(), QueryError> {
         container_queries, ..
     } = render("<div></div><!-- Ignored comment --><style type=\"text/css\">body {} </style><script type=\"text/javascript\"></script>", None);
 
+    assert_eq!(
+        Err(QueryError::Element(
+            indoc! {"
+            Unable to find a label with the text of: LucyRicardo
+
+            Ignored nodes: comments, script, style
+            <div>
+              <div />
+            </div>"}
+            .into()
+        )),
+        container_queries.get_by_label_text("LucyRicardo", SelectorMatcherOptions::default())
+    );
     assert_eq!(
         Err(QueryError::Element(
             indoc! {"

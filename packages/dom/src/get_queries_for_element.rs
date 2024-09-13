@@ -75,6 +75,7 @@ macro_rules! queries_for_element {
 queries_for_element!(
     (alt_text, MatcherOptions),
     (display_value, MatcherOptions),
+    (label_text, SelectorMatcherOptions),
     (placeholder_text, MatcherOptions),
     (test_id, MatcherOptions),
     (text, SelectorMatcherOptions),
