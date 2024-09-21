@@ -80,6 +80,7 @@ build_queries!(
     get_multiple_error,
     get_missing_error,
     display_value,
+    crate::types::Matcher,
     crate::types::MatcherOptions
 );
 

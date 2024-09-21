@@ -9,4 +9,6 @@ pub enum QueryError {
     JsError(JsValue),
     #[error("{0}")]
     Element(String),
+    #[error("{0}")]
+    Unsupported(String),
 }

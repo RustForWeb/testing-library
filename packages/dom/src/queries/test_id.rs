@@ -45,6 +45,7 @@ build_queries!(
     get_multiple_error,
     get_missing_error,
     test_id,
+    crate::types::Matcher,
     crate::types::MatcherOptions
 );
 

@@ -150,6 +150,7 @@ build_queries!(
     get_multiple_error,
     get_missing_error,
     label_text,
+    crate::types::Matcher,
     crate::types::SelectorMatcherOptions
 );
 

@@ -88,8 +88,8 @@ pub fn get_suggestion_error(suggestion: String, container: Element) -> QueryErro
 
 #[macro_export]
 macro_rules! make_single_query {
-    ($all_query:ident, $get_multiple_error:ident, $name:ident, $options_type:ty) => {
-        pub fn $name<M: Into<Matcher>>(
+    ($all_query:ident, $get_multiple_error:ident, $name:ident, $matcher_type:ty, $options_type:ty) => {
+        pub fn $name<M: Into<$matcher_type>>(
             container: &HtmlElement,
             matcher: M,
             options: $options_type,
@@ -121,8 +121,8 @@ macro_rules! make_single_query {
 
 #[macro_export]
 macro_rules! make_get_all_query {
-    ($all_query:ident, $get_missing_error:ident, $name:ident, $options_type:ty) => {
-        pub fn $name<M: Into<Matcher>>(
+    ($all_query:ident, $get_missing_error:ident, $name:ident, $matcher_type:ty, $options_type:ty) => {
+        pub fn $name<M: Into<$matcher_type>>(
             container: &HtmlElement,
             matcher: M,
             options: $options_type,
@@ -144,8 +144,8 @@ macro_rules! make_get_all_query {
 
 #[macro_export]
 macro_rules! make_find_query {
-    ($getter:ident, $name:ident, $options_type:ty, $return_type:ty) => {
-        pub fn $name<M: Into<Matcher>>(
+    ($getter:ident, $name:ident, $matcher_type:ty, $options_type:ty, $return_type:ty) => {
+        pub fn $name<M: Into<$matcher_type>>(
             container: &HtmlElement,
             matcher: M,
             options: $options_type,
@@ -165,8 +165,8 @@ macro_rules! make_find_query {
 
 #[macro_export]
 macro_rules! wrap_single_query_with_suggestion {
-    ($query:ident, $query_by_all_name:expr, $variant:expr, $name:ident, $options_type:ty) => {
-        pub fn $name<M: Into<Matcher>>(
+    ($query:ident, $query_by_all_name:expr, $variant:expr, $name:ident, $matcher_type:ty, $options_type:ty) => {
+        pub fn $name<M: Into<$matcher_type>>(
             container: &HtmlElement,
             matcher: M,
             options: $options_type,
@@ -195,8 +195,8 @@ macro_rules! wrap_single_query_with_suggestion {
 
 #[macro_export]
 macro_rules! wrap_all_by_query_with_suggestion {
-    ($query:ident, $query_by_all_name:expr, $variant:expr, $name:ident, $options_type:ty) => {
-        pub fn $name<M: Into<Matcher>>(
+    ($query:ident, $query_by_all_name:expr, $variant:expr, $name:ident, $matcher_type:ty, $options_type:ty) => {
+        pub fn $name<M: Into<$matcher_type>>(
             container: &HtmlElement,
             matcher: M,
             options: $options_type,
@@ -215,7 +215,7 @@ macro_rules! wrap_all_by_query_with_suggestion {
 
 #[macro_export]
 macro_rules! build_queries {
-    ($query_by_all:ident, $get_multiple_error:ident, $get_missing_error:ident, $name:ident, $options_type:ty) => {
+    ($query_by_all:ident, $get_multiple_error:ident, $get_missing_error:ident, $name:ident, $matcher_type:ty, $options_type:ty) => {
         paste::paste! {
             mod internal {
                 use web_sys::HtmlElement;
@@ -224,7 +224,7 @@ macro_rules! build_queries {
                     config::get_config,
                     error::QueryError,
                     query_helpers::{get_element_error, get_multiple_elements_found_error, get_suggestion_error},
-                    types::{Matcher, Variant, WaitForOptions},
+                    types::{Variant, WaitForOptions},
                     suggestions::{get_suggested_query},
                     wait_for::{wait_for},
                 };
@@ -232,37 +232,37 @@ macro_rules! build_queries {
                 use super::{$query_by_all, $get_multiple_error, $get_missing_error};
 
                 // Query all by
-                $crate::wrap_all_by_query_with_suggestion!($query_by_all, stringify!($query_by_all), Variant::QueryAll, [<query_all_by_ $name>], $options_type);
+                $crate::wrap_all_by_query_with_suggestion!($query_by_all, stringify!($query_by_all), Variant::QueryAll, [<query_all_by_ $name>], $matcher_type, $options_type);
 
                 // Internal query by
-                $crate::make_single_query!($query_by_all, $get_multiple_error, [<_query_by_ $name>], $options_type);
+                $crate::make_single_query!($query_by_all, $get_multiple_error, [<_query_by_ $name>], $matcher_type, $options_type);
 
                 // Query by
-                $crate::wrap_single_query_with_suggestion!([<_query_by_ $name>], stringify!($query_by_all), Variant::Query, [<query_by_ $name>], $options_type);
+                $crate::wrap_single_query_with_suggestion!([<_query_by_ $name>], stringify!($query_by_all), Variant::Query, [<query_by_ $name>], $matcher_type, $options_type);
 
                 // Internal get all by
-                $crate::make_get_all_query!($query_by_all, $get_missing_error, [<_get_all_by_ $name>], $options_type);
+                $crate::make_get_all_query!($query_by_all, $get_missing_error, [<_get_all_by_ $name>], $matcher_type, $options_type);
 
                 // Get all by
-                $crate::wrap_all_by_query_with_suggestion!([<_get_all_by_ $name>], stringify!($query_by_all).replace("query", "get"), Variant::GetAll, [<get_all_by_ $name>], $options_type);
+                $crate::wrap_all_by_query_with_suggestion!([<_get_all_by_ $name>], stringify!($query_by_all).replace("query", "get"), Variant::GetAll, [<get_all_by_ $name>], $matcher_type, $options_type);
 
                 // Internal get by
-                $crate::make_single_query!([<_get_all_by_ $name>], $get_multiple_error, [<_get_by_ $name>], $options_type);
+                $crate::make_single_query!([<_get_all_by_ $name>], $get_multiple_error, [<_get_by_ $name>], $matcher_type, $options_type);
 
                 // Get by
-                $crate::wrap_single_query_with_suggestion!([<_get_by_ $name>], stringify!($query_by_all), Variant::Get, [<get_by_ $name>], $options_type);
+                $crate::wrap_single_query_with_suggestion!([<_get_by_ $name>], stringify!($query_by_all), Variant::Get, [<get_by_ $name>], $matcher_type, $options_type);
 
                 // Internal find all by
-                $crate::wrap_all_by_query_with_suggestion!([<_get_all_by_ $name>], stringify!($query_by_all), Variant::FindAll, [<_find_all_by_ $name>], $options_type);
+                $crate::wrap_all_by_query_with_suggestion!([<_get_all_by_ $name>], stringify!($query_by_all), Variant::FindAll, [<_find_all_by_ $name>], $matcher_type, $options_type);
 
                 // Find all by
-                $crate::make_find_query!([<_find_all_by_ $name>], [<find_all_by_ $name>], $options_type, Vec<HtmlElement>);
+                $crate::make_find_query!([<_find_all_by_ $name>], [<find_all_by_ $name>], $matcher_type, $options_type, Vec<HtmlElement>);
 
                 // Internal find by
-                $crate::wrap_single_query_with_suggestion!([<_get_by_ $name>], stringify!($query_by_all), Variant::Find, [<_find_by_ $name>], $options_type);
+                $crate::wrap_single_query_with_suggestion!([<_get_by_ $name>], stringify!($query_by_all), Variant::Find, [<_find_by_ $name>], $matcher_type, $options_type);
 
                 // Find by
-                $crate::make_find_query!([<_find_by_ $name>], [<find_by_ $name>], $options_type, Option<HtmlElement>);
+                $crate::make_find_query!([<_find_by_ $name>], [<find_by_ $name>], $matcher_type, $options_type, Option<HtmlElement>);
             }
         }
     };

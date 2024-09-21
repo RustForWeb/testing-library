@@ -1,5 +1,6 @@
 use std::{fmt::Display, rc::Rc};
 
+use aria_query::AriaRole;
 use regex::Regex;
 use web_sys::Element;
 
@@ -58,7 +59,7 @@ impl From<String> for Matcher {
     }
 }
 
-// pub enum ByRoleMatcher
+pub type ByRoleMatcher = AriaRole;
 
 pub type NormalizerFn = dyn Fn(String) -> String;
 
