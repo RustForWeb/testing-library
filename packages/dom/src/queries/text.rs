@@ -55,7 +55,11 @@ pub fn _query_all_by_text<M: Into<Matcher>>(
         .collect())
 }
 
-fn get_multiple_error(_container: &HtmlElement, text: Matcher) -> Result<String, QueryError> {
+fn get_multiple_error(
+    _container: &HtmlElement,
+    text: Matcher,
+    _options: SelectorMatcherOptions,
+) -> Result<String, QueryError> {
     Ok(format!("Found multiple elements with the text: {text}"))
 }
 

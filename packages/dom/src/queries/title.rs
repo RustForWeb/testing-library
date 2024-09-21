@@ -57,7 +57,11 @@ pub fn _query_all_by_title<M: Into<Matcher>>(
     .collect())
 }
 
-fn get_multiple_error(_container: &HtmlElement, title: Matcher) -> Result<String, QueryError> {
+fn get_multiple_error(
+    _container: &HtmlElement,
+    title: Matcher,
+    _options: MatcherOptions,
+) -> Result<String, QueryError> {
     Ok(format!("Found multiple elements with the title: {title}"))
 }
 

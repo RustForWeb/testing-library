@@ -20,7 +20,11 @@ pub fn _query_all_by_test_id<M: Into<Matcher>>(
     query_all_by_attribute(get_test_id_attribute(), container, id, options)
 }
 
-fn get_multiple_error(_container: &HtmlElement, id: Matcher) -> Result<String, QueryError> {
+fn get_multiple_error(
+    _container: &HtmlElement,
+    id: Matcher,
+    _options: MatcherOptions,
+) -> Result<String, QueryError> {
     Ok(format!(
         "Found multiple elements by: [{}=\"{}\"]",
         get_test_id_attribute(),

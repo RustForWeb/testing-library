@@ -6,9 +6,8 @@ use crate::{
     label_helpers::{get_labels, get_real_labels},
     matches::{fuzzy_matches, make_normalizer, matches},
     query_all_by_attribute,
-    types::{Matcher, NormalizerOptions, SelectorMatcherOptions},
+    types::{Matcher, MatcherOptions, NormalizerOptions, SelectorMatcherOptions},
     util::node_list_to_vec,
-    MatcherOptions,
 };
 
 pub fn _query_all_by_label_text<M: Into<Matcher>>(
@@ -128,7 +127,11 @@ pub fn _query_all_by_label_text<M: Into<Matcher>>(
 
 // TODO: implement get_all_by_label_text override
 
-fn get_multiple_error(_container: &HtmlElement, text: Matcher) -> Result<String, QueryError> {
+fn get_multiple_error(
+    _container: &HtmlElement,
+    text: Matcher,
+    _options: SelectorMatcherOptions,
+) -> Result<String, QueryError> {
     Ok(format!(
         "Found multiple elements with the label text: {text}"
     ))

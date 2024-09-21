@@ -1,15 +1,18 @@
-use aria_query::{AriaProperty, ROLES};
+use std::collections::HashSet;
+
+use aria_query::{AriaProperty, AriaRole, ROLES, ROLE_ELEMENTS};
 use web_sys::HtmlElement;
 
 use crate::{
     build_queries,
     error::QueryError,
     get_config,
-    types::{ByRoleMatcher, ByRoleOptions},
+    types::{ByRoleMatcher, ByRoleOptions, ByRoleOptionsName},
+    util::node_list_to_vec,
 };
 
 pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
-    _container: &HtmlElement,
+    container: &HtmlElement,
     role: M,
     options: ByRoleOptions,
 ) -> Result<Vec<HtmlElement>, QueryError> {
@@ -29,6 +32,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
     let value_max = options_value.max;
     let value_text = options_value.text;
 
+    // Guard against unknown roles.
     if selected.is_some()
         && !ROLES.get(&role.into()).map_or(false, |role| {
             role.props.contains_key(&AriaProperty::AriaSelected)
@@ -39,6 +43,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
         )));
     }
 
+    // Guard against unknown roles.
     if busy.is_some()
         && !ROLES.get(&role.into()).map_or(false, |role| {
             role.props.contains_key(&AriaProperty::AriaBusy)
@@ -49,6 +54,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
         )));
     }
 
+    // Guard against unknown roles.
     if checked.is_some()
         && !ROLES.get(&role.into()).map_or(false, |role| {
             role.props.contains_key(&AriaProperty::AriaChecked)
@@ -59,6 +65,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
         )));
     }
 
+    // Guard against unknown roles.
     if pressed.is_some()
         && !ROLES.get(&role.into()).map_or(false, |role| {
             role.props.contains_key(&AriaProperty::AriaPressed)
@@ -69,6 +76,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
         )));
     }
 
+    // Guard against unknown roles.
+    // All currently released ARIA versions support `aria-current` on all roles.
+    // Leaving this for symmetry and forward compatibility.
     if current.is_some()
         && !ROLES.get(&role.into()).map_or(false, |role| {
             role.props.contains_key(&AriaProperty::AriaCurrent)
@@ -79,16 +89,14 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
         )));
     }
 
-    if level.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaLevel)
-        })
-    {
+    // Guard against using `level` option with any role other than `heading`.
+    if level.is_some() && role != AriaRole::Heading {
         return Err(QueryError::Unsupported(format!(
-            "`aria-level` is not supported on role \"{role}\"."
+            "Role \"{role}\" cannot have \"level\" property."
         )));
     }
 
+    // Guard against unknown roles.
     if value_now.is_some()
         && !ROLES.get(&role.into()).map_or(false, |role| {
             role.props.contains_key(&AriaProperty::AriaValuenow)
@@ -99,6 +107,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
         )));
     }
 
+    // Guard against unknown roles.
     if value_max.is_some()
         && !ROLES.get(&role.into()).map_or(false, |role| {
             role.props.contains_key(&AriaProperty::AriaValuemax)
@@ -109,6 +118,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
         )));
     }
 
+    // Guard against unknown roles.
     if value_min.is_some()
         && !ROLES.get(&role.into()).map_or(false, |role| {
             role.props.contains_key(&AriaProperty::AriaValuemin)
@@ -119,6 +129,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
         )));
     }
 
+    // Guard against unknown roles.
     if value_text.is_some()
         && !ROLES.get(&role.into()).map_or(false, |role| {
             role.props.contains_key(&AriaProperty::AriaValuetext)
@@ -129,6 +140,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
         )));
     }
 
+    // Guard against unknown roles.
     if expanded.is_some()
         && !ROLES.get(&role.into()).map_or(false, |role| {
             role.props.contains_key(&AriaProperty::AriaExpanded)
@@ -139,21 +151,86 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
         )));
     }
 
-    // TODO
+    Ok(node_list_to_vec::<HtmlElement>(
+        container
+            .query_selector_all(
+                // Only query elements that can be matched by the following filters.
+                &make_role_selector(role),
+            )
+            .map_err(QueryError::JsError)?,
+    )
+    .into_iter()
+    .filter(|_node| {
+        // TODO
 
-    Ok(vec![])
+        false
+    })
+    .collect())
 }
 
-fn get_multiple_error(_container: &HtmlElement, role: ByRoleMatcher) -> Result<String, QueryError> {
-    Ok(format!("Found multiple elements with the role: {role}"))
+fn make_role_selector(role: ByRoleMatcher) -> String {
+    let explicit_role_selector = format!("*[role~=\"{role}\"]");
+
+    let role_relations = ROLE_ELEMENTS.get(&role.into());
+    let implicit_role_selectors = role_relations.map(|role_relations| {
+        role_relations
+            .iter()
+            .map(|relation| relation.name.clone())
+            .collect::<HashSet<String>>()
+    });
+
+    let mut selectors = vec![explicit_role_selector];
+
+    if let Some(implicit_role_selectors) = implicit_role_selectors {
+        selectors.extend(implicit_role_selectors);
+    }
+
+    selectors.join(",")
+}
+
+fn get_name_hint(name: Option<ByRoleOptionsName>) -> String {
+    match name {
+        Some(ByRoleOptionsName::String(name)) => format!(" and name \"{name}\""),
+        Some(ByRoleOptionsName::Regex(name)) => format!(" and name `{}`", name),
+        None => "".into(),
+    }
+}
+
+fn get_multiple_error(
+    _container: &HtmlElement,
+    role: ByRoleMatcher,
+    options: ByRoleOptions,
+) -> Result<String, QueryError> {
+    Ok(format!(
+        "Found multiple elements with the role \"{}\"{}",
+        role,
+        get_name_hint(options.name)
+    ))
 }
 
 fn get_missing_error(
     _container: &HtmlElement,
     role: ByRoleMatcher,
-    _options: ByRoleOptions,
+    options: ByRoleOptions,
 ) -> Result<String, QueryError> {
-    Ok(format!("Unable to find an element with the role: {role}"))
+    let hidden = options.hidden.unwrap_or(get_config().default_hidden);
+
+    let name_hint = "";
+    let description_hint = "";
+    let role_message = "";
+    // TODO
+
+    Ok(format!(
+        "Unable to find an {}element with the role \"{}\"{}{}\n\n{}",
+        match hidden {
+            true => "",
+            false => "accessible ",
+        },
+        role,
+        name_hint,
+        description_hint,
+        role_message.trim()
+    ))
 }
 
 build_queries!(

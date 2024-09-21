@@ -23,7 +23,11 @@ pub fn _query_all_by_alt_text<M: Into<Matcher>>(
     )
 }
 
-fn get_multiple_error(_container: &HtmlElement, alt: Matcher) -> Result<String, QueryError> {
+fn get_multiple_error(
+    _container: &HtmlElement,
+    alt: Matcher,
+    _options: MatcherOptions,
+) -> Result<String, QueryError> {
     Ok(format!("Found multiple elements with the alt text: {alt}"))
 }
 

@@ -59,7 +59,11 @@ pub fn _query_all_by_display_value<M: Into<Matcher>>(
     .collect())
 }
 
-fn get_multiple_error(_container: &HtmlElement, value: Matcher) -> Result<String, QueryError> {
+fn get_multiple_error(
+    _container: &HtmlElement,
+    value: Matcher,
+    _options: MatcherOptions,
+) -> Result<String, QueryError> {
     Ok(format!(
         "Found multiple elements with the display value: {value}"
     ))

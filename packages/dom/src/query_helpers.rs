@@ -96,7 +96,7 @@ macro_rules! make_single_query {
         ) -> Result<Option<HtmlElement>, QueryError> {
             let matcher = matcher.into();
 
-            let mut els = $all_query(container, matcher.clone(), options)?;
+            let mut els = $all_query(container, matcher.clone(), options.clone())?;
             if els.len() > 1 {
                 let element_strings = els
                     .into_iter()
@@ -107,7 +107,7 @@ macro_rules! make_single_query {
                 Err(get_multiple_elements_found_error(
                     format!(
                         "{}\n\nHere are the matching elements:\n\n{}",
-                        $get_multiple_error(container, matcher)?,
+                        $get_multiple_error(container, matcher, options)?,
                         element_strings
                     ),
                     container.clone().into(),

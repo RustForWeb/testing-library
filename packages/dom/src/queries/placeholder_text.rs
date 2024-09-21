@@ -15,7 +15,11 @@ pub fn _query_all_by_placeholder_text<M: Into<Matcher>>(
     query_all_by_attribute("placeholder".to_string(), container, text, options)
 }
 
-fn get_multiple_error(_container: &HtmlElement, text: Matcher) -> Result<String, QueryError> {
+fn get_multiple_error(
+    _container: &HtmlElement,
+    text: Matcher,
+    _options: MatcherOptions,
+) -> Result<String, QueryError> {
     Ok(format!(
         "Found multiple elements with the placeholder text: {text}"
     ))
