@@ -4,7 +4,7 @@ use pretty_format::PrettyFormatOptions;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{Document, Element, Node};
 
-use crate::{dom_element_filter::DomElementFilter, get_config, helpers::get_document};
+use crate::{config::get_config, dom_element_filter::DomElementFilter, helpers::get_document};
 
 pub enum DocumentOrElement {
     Document(Document),

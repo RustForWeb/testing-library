@@ -1,15 +1,30 @@
 use std::collections::HashSet;
 
 use aria_query::{AriaProperty, AriaRole, ROLES, ROLE_ELEMENTS};
-use web_sys::HtmlElement;
+use web_sys::{Element, HtmlElement};
 
 use crate::{
     build_queries,
+    config::get_config,
     error::QueryError,
-    get_config,
-    types::{ByRoleMatcher, ByRoleOptions, ByRoleOptionsName},
+    matches::matches,
+    role_helpers::{
+        compute_aria_busy, compute_aria_checked, compute_aria_current, compute_aria_expanded,
+        compute_aria_pressed, compute_aria_selected, compute_aria_value_max,
+        compute_aria_value_min, compute_aria_value_now, compute_aria_value_text,
+        compute_heading_level, get_implicit_aria_roles, is_inaccessible,
+    },
+    types::{ByRoleMatcher, ByRoleOptions, Matcher},
     util::node_list_to_vec,
 };
+
+fn compute_accessibe_name(_element: &Element) -> String {
+    todo!("port dom-accessibility-api and import compute_accessibe_name")
+}
+
+fn compute_accessibe_description(_element: &Element) -> String {
+    todo!("port dom-accessibility-api and import compute_accessibe_description")
+}
 
 pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
     container: &HtmlElement,
@@ -17,8 +32,12 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
     options: ByRoleOptions,
 ) -> Result<Vec<HtmlElement>, QueryError> {
     let role = role.into();
-    let _hidden = options.hidden.unwrap_or(get_config().default_hidden);
-    let _query_fallbacks = options.query_fallbacks.unwrap_or(false);
+    let role_string = role.to_string();
+
+    let hidden = options.hidden.unwrap_or(get_config().default_hidden);
+    let name = options.name;
+    let description = options.description;
+    let query_fallbacks = options.query_fallbacks.unwrap_or(false);
     let selected = options.selected;
     let busy = options.busy;
     let checked = options.checked;
@@ -160,11 +179,114 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .map_err(QueryError::JsError)?,
     )
     .into_iter()
-    .filter(|_node| {
-        // TODO
+    .filter(|node| {
+        if let Some(role_value) = node.get_attribute("role") {
+            if query_fallbacks {
+                return role_value
+                    .split(' ')
+                    .filter(|role_attribute_token| !role_attribute_token.is_empty())
+                    .any(|role_attribute_token| role_attribute_token == role_string);
+            }
 
-        false
+            // Other wise only send the first token to match.
+            return role_value
+                .split(' ')
+                .next()
+                .is_some_and(|first_role_attribute_token| {
+                    first_role_attribute_token == role_string
+                });
+        }
+
+        let implicit_roles = get_implicit_aria_roles(node);
+
+        implicit_roles
+            .into_iter()
+            .any(|implicit_role| implicit_role == role.into())
     })
+    .filter(|element| {
+        if selected.is_some() {
+            return selected == compute_aria_selected(element);
+        }
+        if let Some(busy) = busy {
+            return busy == compute_aria_busy(element);
+        }
+        if checked.is_some() {
+            return checked == compute_aria_checked(element);
+        }
+        if pressed.is_some() {
+            return pressed == compute_aria_pressed(element);
+        }
+        if let Some(current) = &current {
+            return *current == compute_aria_current(element);
+        }
+        if expanded.is_some() {
+            return expanded == compute_aria_expanded(element);
+        }
+        if level.is_some() {
+            return level == compute_heading_level(element);
+        }
+        if value_now.is_some() || value_max.is_some() || value_min.is_some() || value_text.is_some()
+        {
+            let mut value_matches = true;
+
+            if value_now.is_some() {
+                value_matches = value_matches && value_now == compute_aria_value_now(element);
+            }
+            if value_max.is_some() {
+                value_matches = value_matches && value_max == compute_aria_value_max(element);
+            }
+            if value_min.is_some() {
+                value_matches = value_matches && value_min == compute_aria_value_min(element);
+            }
+            if let Some(value_text) = &value_text {
+                let normalizer = |text| text;
+
+                value_matches = value_matches
+                    && matches(
+                        compute_aria_value_text(element),
+                        Some(element),
+                        value_text,
+                        &normalizer,
+                    );
+            }
+
+            return value_matches;
+        }
+
+        // Don't care if ARIA attributes are unspecified.
+        true
+    })
+    .filter(|element| {
+        if let Some(name) = &name {
+            let normalizer = |text| text;
+
+            matches(
+                Some(compute_accessibe_name(element)),
+                Some(element),
+                name,
+                &normalizer,
+            )
+        } else {
+            // Don't care
+            true
+        }
+    })
+    .filter(|element| {
+        if let Some(description) = &description {
+            let normalizer = |text| text;
+
+            matches(
+                Some(compute_accessibe_description(element)),
+                Some(element),
+                description,
+                &normalizer,
+            )
+        } else {
+            // Don't care
+            true
+        }
+    })
+    .filter(|element| hidden || !is_inaccessible(element))
     .collect())
 }
 
@@ -188,10 +310,12 @@ fn make_role_selector(role: ByRoleMatcher) -> String {
     selectors.join(",")
 }
 
-fn get_name_hint(name: Option<ByRoleOptionsName>) -> String {
+fn get_name_hint(name: Option<Matcher>) -> String {
     match name {
-        Some(ByRoleOptionsName::String(name)) => format!(" and name \"{name}\""),
-        Some(ByRoleOptionsName::Regex(name)) => format!(" and name `{}`", name),
+        Some(Matcher::String(name)) => format!(" and name \"{name}\""),
+        Some(Matcher::Regex(name)) => format!(" and name `{}`", name),
+        Some(Matcher::Number(name)) => format!(" and name `{}`", name),
+        Some(Matcher::Function(_name)) => " and name `Fn`".into(),
         None => "".into(),
     }
 }

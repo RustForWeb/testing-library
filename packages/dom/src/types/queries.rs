@@ -1,34 +1,17 @@
-use regex::Regex;
-// use web_sys::Element;
-
 use crate::types::Matcher;
 
 #[derive(Clone, Default)]
 pub struct ByRoleOptionsValue {
-    pub now: Option<isize>,
-    pub min: Option<isize>,
-    pub max: Option<isize>,
+    pub now: Option<f64>,
+    pub min: Option<f64>,
+    pub max: Option<f64>,
     pub text: Option<Matcher>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Eq, PartialEq)]
 pub enum ByRoleOptionsCurrent {
     Bool(bool),
     String(String),
-}
-
-#[derive(Clone)]
-pub enum ByRoleOptionsName {
-    Regex(Regex),
-    String(String),
-    // Fn(Box<dyn Fn(String, Element) -> bool>),
-}
-
-#[derive(Clone)]
-pub enum ByRoleOptionsDescription {
-    Regex(Regex),
-    String(String),
-    // Fn(Box<dyn Fn(String, Element) -> bool>),
 }
 
 #[derive(Clone, Default)]
@@ -41,11 +24,11 @@ pub struct ByRoleOptions {
     pub pressed: Option<bool>,
     pub current: Option<ByRoleOptionsCurrent>,
     pub expanded: Option<bool>,
-    pub level: Option<isize>,
+    pub level: Option<usize>,
     pub value: Option<ByRoleOptionsValue>,
     pub query_fallbacks: Option<bool>,
-    pub name: Option<ByRoleOptionsName>,
-    pub description: Option<ByRoleOptionsDescription>,
+    pub name: Option<Matcher>,
+    pub description: Option<Matcher>,
 }
 
 impl ByRoleOptions {
@@ -89,7 +72,7 @@ impl ByRoleOptions {
         self
     }
 
-    pub fn level(mut self, value: isize) -> Self {
+    pub fn level(mut self, value: usize) -> Self {
         self.level = Some(value);
         self
     }
@@ -104,12 +87,12 @@ impl ByRoleOptions {
         self
     }
 
-    pub fn name(mut self, value: ByRoleOptionsName) -> Self {
+    pub fn name(mut self, value: Matcher) -> Self {
         self.name = Some(value);
         self
     }
 
-    pub fn description(mut self, value: ByRoleOptionsDescription) -> Self {
+    pub fn description(mut self, value: Matcher) -> Self {
         self.description = Some(value);
         self
     }
