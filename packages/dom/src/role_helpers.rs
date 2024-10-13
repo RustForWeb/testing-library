@@ -5,7 +5,7 @@ use aria_query::{
     ELEMENT_ROLES,
 };
 use wasm_bindgen::JsCast;
-use web_sys::{Element, HtmlInputElement, HtmlOptionElement, Node};
+use web_sys::{Element, HtmlElement, HtmlInputElement, HtmlOptionElement, Node};
 
 use crate::types::ByRoleOptionsCurrent;
 
@@ -100,12 +100,73 @@ static ELEMENT_ROLE_LIST: LazyLock<Vec<ElementRole>> = LazyLock::new(|| {
     result
 });
 
-pub fn _is_subtree_inaccessible(_element: &Element) -> bool {
-    todo!()
+pub fn is_subtree_inaccessible(element: &Element) -> bool {
+    if element
+        .dyn_ref::<HtmlElement>()
+        .is_some_and(|html_element| html_element.hidden())
+    {
+        return true;
+    }
+
+    if element.get_attribute("aria-hidden") == Some("true".into()) {
+        return true;
+    }
+
+    let window = element
+        .owner_document()
+        .expect("Element should have owner document.")
+        .default_view()
+        .expect("Owner document should have default view.");
+
+    if window
+        .get_computed_style(element)
+        .expect("Element should be valid.")
+        .expect("Computed style should exist.")
+        .get_property_value("display")
+        .expect("Computed style should have display.")
+        == "none"
+    {
+        return true;
+    }
+
+    false
 }
 
-pub fn is_inaccessible(_element: &Element) -> bool {
-    todo!()
+// Partial implementation https://www.w3.org/TR/wai-aria-1.2/#tree_exclusion
+// which should only be used for elements with a non-presentational role i.e.
+// `role="none"` and `role="presentation"` will not be excluded.
+//
+// Implements aria-hidden semantics (i.e. parent overrides child)
+// Ignores "Child Presentational: True" characteristics.
+pub fn is_inaccessible(element: &Element) -> bool {
+    let window = element
+        .owner_document()
+        .expect("Element should have owner document.")
+        .default_view()
+        .expect("Owner document should have default view.");
+
+    // Since visibility is inherited we can exit early.
+    if window
+        .get_computed_style(element)
+        .expect("Element should be valid.")
+        .expect("Computed style should exist.")
+        .get_property_value("visibility")
+        .expect("Computed style should have visibility.")
+        == "hidden"
+    {
+        return true;
+    }
+
+    let mut current_element = Some(element.clone());
+    while let Some(element) = current_element.as_ref() {
+        if is_subtree_inaccessible(element) {
+            return true;
+        }
+
+        current_element = element.parent_element();
+    }
+
+    false
 }
 
 pub fn get_implicit_aria_roles(current_node: &Element) -> Vec<AriaRoleDefinitionKey> {
@@ -118,8 +179,22 @@ pub fn get_implicit_aria_roles(current_node: &Element) -> Vec<AriaRoleDefinition
     vec![]
 }
 
-pub fn get_roles(_container: &Node) -> Vec<String> {
+pub fn get_roles(_container: Node) -> Vec<String> {
+    fn _flatten_dom(node: Node) -> Vec<Node> {
+        let nodes = vec![node.clone()];
+        if let Some(_element) = node.dyn_ref::<Element>() {
+            todo!()
+            // nodes.extend(element.children());
+        }
+        nodes
+    }
+
     todo!()
+    // flatten_dom(contaier).into_iter().filter(|_element| {
+    //     // TODO
+    //     false
+    // })
+    //.fold(init, f)
 }
 
 pub fn log_roles() {
