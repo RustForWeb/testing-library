@@ -1,13 +1,16 @@
-use std::sync::LazyLock;
+use std::{collections::HashMap, sync::LazyLock};
 
 use aria_query::{
     AriaRoleDefinitionKey, AriaRoleRelationConcept, AriaRoleRelationConceptAttributeConstraint,
     ELEMENT_ROLES,
 };
+use dom_accessibility_api::{
+    compute_accessible_description, compute_accessible_name, ComputeTextAlternativeOptions,
+};
 use wasm_bindgen::JsCast;
-use web_sys::{Element, HtmlElement, HtmlInputElement, HtmlOptionElement, Node};
+use web_sys::{Element, HtmlElement, HtmlInputElement, HtmlOptionElement};
 
-use crate::types::ByRoleOptionsCurrent;
+use crate::{pretty_dom, types::ByRoleOptionsCurrent, util::html_collection_to_vec};
 
 struct ElementRole {
     r#match: Box<dyn Fn(&Element) -> bool + Send + Sync>,
@@ -179,26 +182,120 @@ pub fn get_implicit_aria_roles(current_node: &Element) -> Vec<AriaRoleDefinition
     vec![]
 }
 
-pub fn get_roles(_container: Node) -> Vec<String> {
-    fn _flatten_dom(node: Node) -> Vec<Node> {
-        let nodes = vec![node.clone()];
-        if let Some(_element) = node.dyn_ref::<Element>() {
-            todo!()
-            // nodes.extend(element.children());
-        }
-        nodes
-    }
-
-    todo!()
-    // flatten_dom(contaier).into_iter().filter(|_element| {
-    //     // TODO
-    //     false
-    // })
-    //.fold(init, f)
+#[derive(Clone, Default)]
+pub struct GetRolesOptions {
+    pub hidden: Option<bool>,
 }
 
-pub fn log_roles() {
-    todo!()
+pub fn get_roles(
+    container: Element,
+    options: GetRolesOptions,
+) -> HashMap<AriaRoleDefinitionKey, Vec<Element>> {
+    fn flatten_dom(element: Element) -> Vec<Element> {
+        let mut elements = vec![element.clone()];
+        elements.extend(
+            html_collection_to_vec::<Element>(element.children())
+                .into_iter()
+                .flat_map(flatten_dom)
+                .collect::<Vec<_>>(),
+        );
+        elements
+    }
+
+    let hidden = options.hidden.unwrap_or(false);
+
+    flatten_dom(container)
+        .into_iter()
+        .filter(|element| hidden || !is_inaccessible(element))
+        .fold(HashMap::new(), |mut acc, element| {
+            // TODO: This violates html-aria which does not allow any role on every element.
+            let roles = if element.has_attribute("role") {
+                element
+                    .get_attribute("role")
+                    .expect("Attribute should exist.")
+                    .split(' ')
+                    .filter_map(|role| role.parse::<AriaRoleDefinitionKey>().ok())
+                    .take(1)
+                    .collect::<Vec<_>>()
+            } else {
+                get_implicit_aria_roles(&element)
+            };
+
+            for role in roles {
+                acc.entry(role)
+                    .and_modify(|entry| entry.push(element.clone()))
+                    .or_insert_with(|| vec![element.clone()]);
+            }
+
+            acc
+        })
+}
+
+#[derive(Clone, Default)]
+pub struct PrettyRolesOptions {
+    pub hidden: Option<bool>,
+    pub include_description: Option<bool>,
+}
+
+fn pretty_roles(dom: Element, options: PrettyRolesOptions) -> String {
+    let roles = get_roles(
+        dom,
+        GetRolesOptions {
+            hidden: options.hidden,
+        },
+    );
+
+    roles
+        .into_iter()
+        // We prefer to skip generic role, we don't recommend it.
+        .filter(|(role, _)| *role != AriaRoleDefinitionKey::Generic)
+        .map(|(role, elements)| {
+            let delimiter_bar = "-".repeat(50);
+            let elements_string = elements
+                .iter()
+                .map(|element| {
+                    let name_string = format!(
+                        "Name \"{}\":\n",
+                        compute_accessible_name(element, ComputeTextAlternativeOptions::default())
+                    );
+
+                    let dom_string = pretty_dom(
+                        Some(
+                            element
+                                .clone_node_with_deep(false)
+                                .expect("Node should be cloned.")
+                                .dyn_into::<Element>()
+                                .expect("Cloned node should be an Element.")
+                                .into(),
+                        ),
+                        None,
+                    );
+
+                    if options.include_description.unwrap_or(false) {
+                        let description_string = format!(
+                            "Description \"{}\":",
+                            compute_accessible_description(
+                                element,
+                                ComputeTextAlternativeOptions::default()
+                            )
+                        );
+
+                        format!("{name_string}{description_string}{dom_string}")
+                    } else {
+                        format!("{name_string}{dom_string}")
+                    }
+                })
+                .collect::<Vec<_>>()
+                .join("\n\n");
+
+            format!("{role}:\n\n{elements_string}\n\n{delimiter_bar}")
+        })
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+pub fn log_roles(dom: Element, options: PrettyRolesOptions) {
+    log::info!("{}", pretty_roles(dom, options));
 }
 
 pub fn compute_aria_selected(element: &Element) -> Option<bool> {
