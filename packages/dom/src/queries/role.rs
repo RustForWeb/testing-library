@@ -1,7 +1,10 @@
 use std::collections::HashSet;
 
 use aria_query::{AriaProperty, AriaRole, ROLES, ROLE_ELEMENTS};
-use web_sys::{Element, HtmlElement};
+use dom_accessibility_api::{
+    compute_accessible_description, compute_accessible_name, ComputeTextAlternativeOptions,
+};
+use web_sys::HtmlElement;
 
 use crate::{
     build_queries,
@@ -17,14 +20,6 @@ use crate::{
     types::{ByRoleMatcher, ByRoleOptions, Matcher},
     util::node_list_to_vec,
 };
-
-fn compute_accessibe_name(_element: &Element) -> String {
-    todo!("port dom-accessibility-api and import compute_accessibe_name")
-}
-
-fn compute_accessibe_description(_element: &Element) -> String {
-    todo!("port dom-accessibility-api and import compute_accessibe_description")
-}
 
 pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
     container: &HtmlElement,
@@ -261,7 +256,10 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             let normalizer = |text| text;
 
             matches(
-                Some(compute_accessibe_name(element)),
+                Some(compute_accessible_name(
+                    element,
+                    ComputeTextAlternativeOptions::default(),
+                )),
                 Some(element),
                 name,
                 &normalizer,
@@ -276,7 +274,10 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             let normalizer = |text| text;
 
             matches(
-                Some(compute_accessibe_description(element)),
+                Some(compute_accessible_description(
+                    element,
+                    ComputeTextAlternativeOptions::default(),
+                )),
                 Some(element),
                 description,
                 &normalizer,

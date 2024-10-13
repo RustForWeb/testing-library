@@ -10,7 +10,6 @@ pub type GetElementErrorFn = dyn Fn(Option<String>, Element) -> QueryError + Sen
 pub struct Config {
     pub test_id_attribute: String,
     // TODO
-    pub computed_style_supports_pseudo_elements: bool,
     /// Default value for the `hidden` option in `by_role` queries.
     pub default_hidden: bool,
     /// Default value for the `ignore` option in `by_text` queries.
@@ -27,11 +26,6 @@ impl Config {
     pub fn update(&mut self, other: PartialConfig) {
         if let Some(test_id_attribute) = other.test_id_attribute {
             self.test_id_attribute = test_id_attribute;
-        }
-        if let Some(computed_style_supports_pseudo_elements) =
-            other.computed_style_supports_pseudo_elements
-        {
-            self.computed_style_supports_pseudo_elements = computed_style_supports_pseudo_elements;
         }
         if let Some(default_hidden) = other.default_hidden {
             self.default_hidden = default_hidden;
@@ -55,7 +49,6 @@ impl Config {
 pub struct PartialConfig {
     pub test_id_attribute: Option<String>,
     // TODO
-    pub computed_style_supports_pseudo_elements: Option<bool>,
     /// Default value for the `hidden` option in `by_role` queries.
     pub default_hidden: Option<bool>,
     /// Default value for the `ignore` option in `by_text` queries.
@@ -71,11 +64,6 @@ pub struct PartialConfig {
 impl PartialConfig {
     pub fn test_id_attribute(mut self, value: String) -> Self {
         self.test_id_attribute = Some(value);
-        self
-    }
-
-    pub fn computed_style_supports_pseudo_elements(mut self, value: bool) -> Self {
-        self.computed_style_supports_pseudo_elements = Some(value);
         self
     }
 
@@ -109,9 +97,6 @@ impl From<&Config> for PartialConfig {
     fn from(value: &Config) -> Self {
         Self {
             test_id_attribute: Some(value.test_id_attribute.clone()),
-            computed_style_supports_pseudo_elements: Some(
-                value.computed_style_supports_pseudo_elements,
-            ),
             default_hidden: Some(value.default_hidden),
             default_ignore: Some(value.default_ignore.clone()),
             show_original_stack_trace: Some(value.show_original_stack_trace),
