@@ -193,6 +193,22 @@ fn get_throws_a_useful_error_message() -> Result<(), QueryError> {
         )),
         container_queries.get_by_display_value("LucyRicardo", MatcherOptions::default())
     );
+    // TODO
+    // assert_eq!(
+    //     Err(QueryError::Element(
+    //         indoc! {"
+    //         Unable to find an accessible element with the role: \"LucyRicardo\"
+
+    //         There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+    //         Ignored nodes: comments, script, style
+    //         <div>
+    //           <div />
+    //         </div>"}
+    //         .into()
+    //     )),
+    //     container_queries.get_by_role("LucyRicardo", ByRoleOptions::default())
+    // );
 
     after_each();
 

@@ -4,6 +4,7 @@ use crate::{
     error::QueryError,
     queries::*,
     types::{Matcher, MatcherOptions, SelectorMatcherOptions, WaitForOptions},
+    ByRoleMatcher, ByRoleOptions,
 };
 
 pub fn get_queries_for_element(element: HtmlElement) -> BoundFunctions {
@@ -15,10 +16,10 @@ pub struct BoundFunctions {
 }
 
 macro_rules! queries_for_element {
-    ($(($name:ident, $options_type:ty)),*,) => {
+    ($(($name:ident, $matcher_type:ty, $options_type:ty)),*,) => {
         paste::paste! {
             impl BoundFunctions {
-                $(pub fn [< find_by_ $name >]<M: Into<Matcher>>(
+                $(pub fn [< find_by_ $name >]<M: Into<$matcher_type>>(
                     &self,
                     matcher: M,
                     options: $options_type,
@@ -27,7 +28,7 @@ macro_rules! queries_for_element {
                     [< find_by_ $name >](&self.element, matcher, options, wait_for_options)
                 })*
 
-                $(pub fn [< find_all_by_ $name >]<M: Into<Matcher>>(
+                $(pub fn [< find_all_by_ $name >]<M: Into<$matcher_type>>(
                     &self,
                     matcher: M,
                     options: $options_type,
@@ -36,7 +37,7 @@ macro_rules! queries_for_element {
                     [< find_all_by_ $name >](&self.element, matcher, options, wait_for_options)
                 })*
 
-                $(pub fn [< get_by_ $name >]<M: Into<Matcher>>(
+                $(pub fn [< get_by_ $name >]<M: Into<$matcher_type>>(
                     &self,
                     matcher: M,
                     options: $options_type,
@@ -44,7 +45,7 @@ macro_rules! queries_for_element {
                     [< get_by_ $name >](&self.element, matcher, options)
                 })*
 
-                $(pub fn [< get_all_by_ $name >]<M: Into<Matcher>>(
+                $(pub fn [< get_all_by_ $name >]<M: Into<$matcher_type>>(
                     &self,
                     matcher: M,
                     options: $options_type,
@@ -52,7 +53,7 @@ macro_rules! queries_for_element {
                     [< get_all_by_ $name >](&self.element, matcher, options)
                 })*
 
-                $(pub fn [< query_by_ $name >]<M: Into<Matcher>>(
+                $(pub fn [< query_by_ $name >]<M: Into<$matcher_type>>(
                     &self,
                     matcher: M,
                     options: $options_type,
@@ -60,7 +61,7 @@ macro_rules! queries_for_element {
                     [< query_by_ $name >](&self.element, matcher, options)
                 })*
 
-                $(pub fn [< query_all_by_ $name >]<M: Into<Matcher>>(
+                $(pub fn [< query_all_by_ $name >]<M: Into<$matcher_type>>(
                     &self,
                     matcher: M,
                     options: $options_type,
@@ -73,11 +74,12 @@ macro_rules! queries_for_element {
 }
 
 queries_for_element!(
-    (alt_text, MatcherOptions),
-    (display_value, MatcherOptions),
-    (label_text, SelectorMatcherOptions),
-    (placeholder_text, MatcherOptions),
-    (test_id, MatcherOptions),
-    (text, SelectorMatcherOptions),
-    (title, MatcherOptions),
+    (alt_text, Matcher, MatcherOptions),
+    (display_value, Matcher, MatcherOptions),
+    (label_text, Matcher, SelectorMatcherOptions),
+    (placeholder_text, Matcher, MatcherOptions),
+    (role, ByRoleMatcher, ByRoleOptions),
+    (test_id, Matcher, MatcherOptions),
+    (text, Matcher, SelectorMatcherOptions),
+    (title, Matcher, MatcherOptions),
 );
