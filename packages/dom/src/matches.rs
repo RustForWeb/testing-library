@@ -102,6 +102,87 @@ pub fn make_normalizer(
 }
 
 fn match_regex(matcher: &Regex, text: String) -> bool {
-    // TODO: if statement?
     matcher.is_match(&text)
+}
+
+#[cfg(test)]
+mod tests {
+    use std::rc::Rc;
+
+    use regex::Regex;
+    use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
+
+    use crate::types::Matcher;
+
+    use super::{fuzzy_matches, matches};
+
+    wasm_bindgen_test_configure!(run_in_browser);
+
+    fn normalizer(text: String) -> String {
+        text
+    }
+
+    #[wasm_bindgen_test]
+    fn matchers_accept_strings() {
+        assert!(matches(
+            Some("ABC".into()),
+            None,
+            &Matcher::String("ABC".into()),
+            &normalizer,
+        ));
+        assert!(fuzzy_matches(
+            Some("ABC".into()),
+            None,
+            &Matcher::String("ABC".into()),
+            &normalizer,
+        ));
+    }
+
+    #[wasm_bindgen_test]
+    fn matchers_accept_regex() {
+        assert!(matches(
+            Some("ABC".into()),
+            None,
+            &Matcher::Regex(Regex::new("ABC").expect("Regex should be valid.")),
+            &normalizer,
+        ));
+        assert!(fuzzy_matches(
+            Some("ABC".into()),
+            None,
+            &Matcher::Regex(Regex::new("ABC").expect("Regex should be valid.")),
+            &normalizer,
+        ));
+    }
+
+    #[wasm_bindgen_test]
+    fn matchers_accept_functions() {
+        assert!(matches(
+            Some("ABC".into()),
+            None,
+            &Matcher::Function(Rc::new(|text, _| text == "ABC")),
+            &normalizer,
+        ));
+        assert!(fuzzy_matches(
+            Some("ABC".into()),
+            None,
+            &Matcher::Function(Rc::new(|text, _| text == "ABC")),
+            &normalizer,
+        ));
+    }
+
+    #[wasm_bindgen_test]
+    fn matchers_return_false_if_text_to_match_is_not_a_string() {
+        assert!(!matches(
+            None,
+            None,
+            &Matcher::String("ABC".into()),
+            &normalizer,
+        ));
+        assert!(!fuzzy_matches(
+            None,
+            None,
+            &Matcher::String("ABC".into()),
+            &normalizer,
+        ));
+    }
 }
