@@ -6,7 +6,7 @@ Rust port of [Testing Library](https://testing-library.com/).
 
 ## Frameworks
 
-Rust Radix is available for these Rust frameworks:
+Rust Testing Library is available for these Rust frameworks:
 
 -   [DOM](./packages/dom) ([`web-sys`](https://rustwasm.github.io/wasm-bindgen/web-sys/index.html))
 
