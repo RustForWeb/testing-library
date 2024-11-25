@@ -1,3 +1,9 @@
+<p align="center">
+    <a href="./logo.svg">
+        <img src="./logo.svg" width="300" height="200" alt="Rust Testing Library Logo">
+    </a>
+</p>
+
 <h1 align="center">Rust Testing Libary</h1>
 
 Rust port of [Testing Library](https://testing-library.com/).
@@ -21,6 +27,10 @@ See [the Rust Testing Library book](https://testing-library.rustforweb.org/intro
 ## Documentation
 
 See [the Rust Testing Library book](https://testing-library.rustforweb.org).
+
+## Credits
+
+The logo is a combination of [Ferris the Rustacean](https://rustacean.net/) and [an octopus icon](https://www.svgrepo.com/svg/164420/octopus).
 
 ## License
 

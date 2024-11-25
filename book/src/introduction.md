@@ -1,8 +1,12 @@
+<p align="center">
+    <img src="./images/logo.svg" width="300" height="200" alt="Rust Testing Library Logo">
+</p>
+
 # Introduction
 
 Rust Testing Library is a Rust port of [Testing Library](https://testing-library.com/).
 
-TODO: introduction text
+[Testing Library](https://testing-library.com/) is a library of simple and complete testing utilities that encourage good testing practices.
 
 ## Frameworks
 

@@ -1,8 +1,8 @@
-<!-- <p align="center">
-    <a href="../../../../logo.svg">
-        <img src="../../../../logo.svg" width="300" height="200" alt="Rust Testing Library Logo">
+<p align="center">
+    <a href="../../logo.svg">
+        <img src="../../logo.svg" width="300" height="200" alt="Rust Testing Library Logo">
     </a>
-</p> -->
+</p>
 
 <h1 align="center">testing-library-dom</h1>
 
