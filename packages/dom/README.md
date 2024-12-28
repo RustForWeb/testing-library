@@ -16,6 +16,6 @@ See [the Rust Testing Libary book](https://testing-library.rustforweb.org/) for 
 
 ## Rust For Web
 
-The Rust Testing Library project is part of the [Rust For Web](https://github.com/RustForWeb).
+The Rust Testing Library project is part of [Rust For Web](https://github.com/RustForWeb).
 
 [Rust For Web](https://github.com/RustForWeb) creates and ports web UI libraries for Rust. All projects are free and open source.
