@@ -1,3 +1,5 @@
+#![cfg(target_arch = "wasm32")]
+
 mod helpers;
 
 use std::sync::{Arc, LazyLock, Mutex};
