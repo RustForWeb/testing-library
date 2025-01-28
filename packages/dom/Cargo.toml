@@ -10,7 +10,7 @@ repository.workspace = true
 version.workspace = true
 
 [dependencies]
-aria-query = "0.0.3"
+aria-query = "0.0.4"
 dom-accessibility-api = "0.0.2"
 log.workspace = true
 paste = "1.0.15"
