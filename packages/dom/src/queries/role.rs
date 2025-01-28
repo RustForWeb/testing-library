@@ -48,9 +48,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
 
     // Guard against unknown roles.
     if selected.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaSelected)
-        })
+        && !ROLES
+            .get(&role.into())
+            .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaSelected))
     {
         return Err(QueryError::Unsupported(format!(
             "`aria-selected` is not supported on role \"{role}\"."
@@ -59,9 +59,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
 
     // Guard against unknown roles.
     if busy.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaBusy)
-        })
+        && !ROLES
+            .get(&role.into())
+            .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaBusy))
     {
         return Err(QueryError::Unsupported(format!(
             "`aria-busy` is not supported on role \"{role}\"."
@@ -70,9 +70,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
 
     // Guard against unknown roles.
     if checked.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaChecked)
-        })
+        && !ROLES
+            .get(&role.into())
+            .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaChecked))
     {
         return Err(QueryError::Unsupported(format!(
             "`aria-checked` is not supported on role \"{role}\"."
@@ -81,9 +81,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
 
     // Guard against unknown roles.
     if pressed.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaPressed)
-        })
+        && !ROLES
+            .get(&role.into())
+            .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaPressed))
     {
         return Err(QueryError::Unsupported(format!(
             "`aria-pressed` is not supported on role \"{role}\"."
@@ -94,9 +94,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
     // All currently released ARIA versions support `aria-current` on all roles.
     // Leaving this for symmetry and forward compatibility.
     if current.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaCurrent)
-        })
+        && !ROLES
+            .get(&role.into())
+            .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaCurrent))
     {
         return Err(QueryError::Unsupported(format!(
             "`aria-current` is not supported on role \"{role}\"."
@@ -112,9 +112,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
 
     // Guard against unknown roles.
     if value_now.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaValuenow)
-        })
+        && !ROLES
+            .get(&role.into())
+            .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaValuenow))
     {
         return Err(QueryError::Unsupported(format!(
             "`aria-valuenow` is not supported on role \"{role}\"."
@@ -123,9 +123,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
 
     // Guard against unknown roles.
     if value_max.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaValuemax)
-        })
+        && !ROLES
+            .get(&role.into())
+            .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaValuemax))
     {
         return Err(QueryError::Unsupported(format!(
             "`aria-valuemax` is not supported on role \"{role}\"."
@@ -134,9 +134,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
 
     // Guard against unknown roles.
     if value_min.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaValuemin)
-        })
+        && !ROLES
+            .get(&role.into())
+            .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaValuemin))
     {
         return Err(QueryError::Unsupported(format!(
             "`aria-valuemin` is not supported on role \"{role}\"."
@@ -145,9 +145,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
 
     // Guard against unknown roles.
     if value_text.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaValuetext)
-        })
+        && !ROLES
+            .get(&role.into())
+            .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaValuetext))
     {
         return Err(QueryError::Unsupported(format!(
             "`aria-valuetext` is not supported on role \"{role}\"."
@@ -156,9 +156,9 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
 
     // Guard against unknown roles.
     if expanded.is_some()
-        && !ROLES.get(&role.into()).map_or(false, |role| {
-            role.props.contains_key(&AriaProperty::AriaExpanded)
-        })
+        && !ROLES
+            .get(&role.into())
+            .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaExpanded))
     {
         return Err(QueryError::Unsupported(format!(
             "`aria-expanded` is not supported on role \"{role}\"."
