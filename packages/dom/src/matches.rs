@@ -105,7 +105,7 @@ fn match_regex(matcher: &Regex, text: String) -> bool {
     matcher.is_match(&text)
 }
 
-#[cfg(test)]
+#[cfg(all(test, target_arch = "wasm32"))]
 mod tests {
     use std::rc::Rc;
 

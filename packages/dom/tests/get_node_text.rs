@@ -1,3 +1,5 @@
+#![cfg(target_arch = "wasm32")]
+
 mod helpers;
 
 use testing_library_dom::get_node_text;

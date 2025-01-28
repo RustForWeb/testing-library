@@ -1,3 +1,5 @@
+#![cfg(target_arch = "wasm32")]
+
 mod helpers;
 
 use helpers::test_utils::render_into_document;
