@@ -52,9 +52,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "dom-accessibility-api"
-version = "0.0.2"
+version = "0.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "deb1a0f49725723d1372a15e358412e2a5e23e76b7d20c8773aa218f4149251d"
+checksum = "e0ee6f4a381771d1ced9261215ee46a434ca19f0a3567fa5cb013e1a3da75cb2"
 dependencies = [
  "regex",
  "web-sys",

@@ -11,7 +11,7 @@ version.workspace = true
 
 [dependencies]
 aria-query = "0.0.4"
-dom-accessibility-api = "0.0.2"
+dom-accessibility-api = "0.0.3"
 log.workspace = true
 paste = "1.0.15"
 pretty-format = { path = "../pretty-format", version = "0.0.1" }
