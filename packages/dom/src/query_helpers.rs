@@ -1,11 +1,11 @@
 use web_sys::{Element, HtmlElement};
 
 use crate::{
+    Matcher, MatcherOptions, NormalizerOptions,
     config::get_config,
     error::QueryError,
     matches::{fuzzy_matches, make_normalizer, matches},
     util::node_list_to_vec,
-    Matcher, MatcherOptions, NormalizerOptions,
 };
 
 pub fn get_element_error(message: Option<String>, container: Element) -> QueryError {
@@ -13,7 +13,12 @@ pub fn get_element_error(message: Option<String>, container: Element) -> QueryEr
 }
 
 pub fn get_multiple_elements_found_error(message: String, container: Element) -> QueryError {
-    get_element_error(Some(format!("{message}\n\n(If this is intentional, then use the `*_all_by_*` variant of the query (like `query_all_by_text`, `get_all_by_text`, or `find_all_by_text`)).")), container)
+    get_element_error(
+        Some(format!(
+            "{message}\n\n(If this is intentional, then use the `*_all_by_*` variant of the query (like `query_all_by_text`, `get_all_by_text`, or `find_all_by_text`))."
+        )),
+        container,
+    )
 }
 
 pub fn query_all_by_attribute<M: Into<Matcher>>(
@@ -165,7 +170,7 @@ macro_rules! make_find_query {
 
 #[macro_export]
 macro_rules! wrap_single_query_with_suggestion {
-    ($query:ident, $query_by_all_name:expr, $variant:expr, $name:ident, $matcher_type:ty, $options_type:ty) => {
+    ($query:ident, $query_by_all_name:expr_2021, $variant:expr_2021, $name:ident, $matcher_type:ty, $options_type:ty) => {
         pub fn $name<M: Into<$matcher_type>>(
             container: &HtmlElement,
             matcher: M,
@@ -195,7 +200,7 @@ macro_rules! wrap_single_query_with_suggestion {
 
 #[macro_export]
 macro_rules! wrap_all_by_query_with_suggestion {
-    ($query:ident, $query_by_all_name:expr, $variant:expr, $name:ident, $matcher_type:ty, $options_type:ty) => {
+    ($query:ident, $query_by_all_name:expr_2021, $variant:expr_2021, $name:ident, $matcher_type:ty, $options_type:ty) => {
         pub fn $name<M: Into<$matcher_type>>(
             container: &HtmlElement,
             matcher: M,

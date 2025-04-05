@@ -7,7 +7,7 @@ use indoc::indoc;
 use testing_library_dom::pretty_dom;
 use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
 
-use self::helpers::test_utils::{render, RenderReturn};
+use self::helpers::test_utils::{RenderReturn, render};
 
 wasm_bindgen_test_configure!(run_in_browser);
 

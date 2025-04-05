@@ -1,4 +1,4 @@
-use web_sys::{window, Document};
+use web_sys::{Document, window};
 
 pub fn get_document() -> Document {
     window()

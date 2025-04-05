@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 use mockall::automock;
 use testing_library_dom::{
-    configure, get_element_error, ConfigFnOrPartial, PartialConfig, QueryError,
+    ConfigFnOrPartial, PartialConfig, QueryError, configure, get_element_error,
 };
 use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
 use web_sys::{Document, Element};

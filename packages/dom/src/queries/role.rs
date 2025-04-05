@@ -1,8 +1,8 @@
 use std::collections::HashSet;
 
-use aria_query::{AriaProperty, AriaRole, ROLES, ROLE_ELEMENTS};
+use aria_query::{AriaProperty, AriaRole, ROLE_ELEMENTS, ROLES};
 use dom_accessibility_api::{
-    compute_accessible_description, compute_accessible_name, ComputeTextAlternativeOptions,
+    ComputeTextAlternativeOptions, compute_accessible_description, compute_accessible_name,
 };
 use web_sys::HtmlElement;
 

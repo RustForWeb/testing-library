@@ -1,8 +1,8 @@
 use web_sys::HtmlElement;
 
 use crate::{
-    types::{Method, Suggestion, Variant},
     MatcherOptions,
+    types::{Method, Suggestion, Variant},
 };
 
 fn make_suggestion(
