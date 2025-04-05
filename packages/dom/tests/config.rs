@@ -1,6 +1,6 @@
 use std::sync::{Arc, LazyLock, Mutex, MutexGuard};
 
-use testing_library_dom::{configure, get_config, ConfigFnOrPartial, PartialConfig};
+use testing_library_dom::{ConfigFnOrPartial, PartialConfig, configure, get_config};
 
 static CONFIG_LOCK: Mutex<()> = Mutex::new(());
 static ORIGINAL_CONFIG: LazyLock<Arc<Mutex<PartialConfig>>> =

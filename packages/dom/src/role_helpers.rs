@@ -5,7 +5,7 @@ use aria_query::{
     ELEMENT_ROLES,
 };
 use dom_accessibility_api::{
-    compute_accessible_description, compute_accessible_name, ComputeTextAlternativeOptions,
+    ComputeTextAlternativeOptions, compute_accessible_description, compute_accessible_name,
 };
 use wasm_bindgen::JsCast;
 use web_sys::{Element, HtmlElement, HtmlInputElement, HtmlOptionElement};

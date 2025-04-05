@@ -4,7 +4,7 @@ use regex::Regex;
 use web_sys::Element;
 
 use crate::{
-    error::QueryError, DefaultNormalizerOptions, Matcher, NormalizerFn, NormalizerOptions,
+    DefaultNormalizerOptions, Matcher, NormalizerFn, NormalizerOptions, error::QueryError,
 };
 
 pub fn fuzzy_matches(

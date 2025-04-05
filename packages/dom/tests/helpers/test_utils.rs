@@ -1,9 +1,9 @@
 // TODO: remove
 #![allow(dead_code)]
 
-use testing_library_dom::{get_queries_for_element, BoundFunctions};
+use testing_library_dom::{BoundFunctions, get_queries_for_element};
 use wasm_bindgen::JsCast;
-use web_sys::{window, Document, Element, HtmlElement};
+use web_sys::{Document, Element, HtmlElement, window};
 
 pub fn document() -> Document {
     window()

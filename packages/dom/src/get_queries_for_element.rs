@@ -1,10 +1,10 @@
 use web_sys::HtmlElement;
 
 use crate::{
+    ByRoleMatcher, ByRoleOptions,
     error::QueryError,
     queries::*,
     types::{Matcher, MatcherOptions, SelectorMatcherOptions, WaitForOptions},
-    ByRoleMatcher, ByRoleOptions,
 };
 
 pub fn get_queries_for_element(element: HtmlElement) -> BoundFunctions {

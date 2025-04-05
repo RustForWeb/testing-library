@@ -6,11 +6,11 @@ use std::sync::{Arc, LazyLock, Mutex};
 
 use indoc::indoc;
 use testing_library_dom::{
-    configure, ConfigFnOrPartial, MatcherOptions, PartialConfig, QueryError, SelectorMatcherOptions,
+    ConfigFnOrPartial, MatcherOptions, PartialConfig, QueryError, SelectorMatcherOptions, configure,
 };
 use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
 
-use self::helpers::test_utils::{render, RenderReturn};
+use self::helpers::test_utils::{RenderReturn, render};
 
 wasm_bindgen_test_configure!(run_in_browser);
 
@@ -46,24 +46,36 @@ fn query_can_return_none() -> Result<(), QueryError> {
         container_queries, ..
     } = render("<div />", None);
 
-    assert!(container_queries
-        .query_by_test_id("LucyRicardo", MatcherOptions::default())?
-        .is_none());
-    assert!(container_queries
-        .query_by_label_text("LucyRicardo", SelectorMatcherOptions::default())?
-        .is_none());
-    assert!(container_queries
-        .query_by_display_value("LucyRicardo", MatcherOptions::default())?
-        .is_none());
-    assert!(container_queries
-        .query_by_placeholder_text("LucyRicardo", MatcherOptions::default())?
-        .is_none());
-    assert!(container_queries
-        .query_by_text("LucyRicardo", SelectorMatcherOptions::default())?
-        .is_none());
-    assert!(container_queries
-        .query_by_alt_text("LucyRicardo", MatcherOptions::default())?
-        .is_none());
+    assert!(
+        container_queries
+            .query_by_test_id("LucyRicardo", MatcherOptions::default())?
+            .is_none()
+    );
+    assert!(
+        container_queries
+            .query_by_label_text("LucyRicardo", SelectorMatcherOptions::default())?
+            .is_none()
+    );
+    assert!(
+        container_queries
+            .query_by_display_value("LucyRicardo", MatcherOptions::default())?
+            .is_none()
+    );
+    assert!(
+        container_queries
+            .query_by_placeholder_text("LucyRicardo", MatcherOptions::default())?
+            .is_none()
+    );
+    assert!(
+        container_queries
+            .query_by_text("LucyRicardo", SelectorMatcherOptions::default())?
+            .is_none()
+    );
+    assert!(
+        container_queries
+            .query_by_alt_text("LucyRicardo", MatcherOptions::default())?
+            .is_none()
+    );
 
     after_each();
 
@@ -76,7 +88,10 @@ fn get_throws_a_useful_error_message() -> Result<(), QueryError> {
 
     let RenderReturn {
         container_queries, ..
-    } = render("<div></div><!-- Ignored comment --><style type=\"text/css\">body {} </style><script type=\"text/javascript\"></script>", None);
+    } = render(
+        "<div></div><!-- Ignored comment --><style type=\"text/css\">body {} </style><script type=\"text/javascript\"></script>",
+        None,
+    );
 
     assert_eq!(
         Err(QueryError::Element(
