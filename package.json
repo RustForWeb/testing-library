@@ -1,7 +1,7 @@
 {
     "name": "@rustforweb/testing-library",
     "description": "Rust port of Testing Library.",
-    "author": "Rust For Web <info@rustforweb.org>",
+    "author": "Rust for Web <info@rustforweb.org>",
     "repository": "github:RustForWeb/testing-library",
     "license": "MIT",
     "private": true,
