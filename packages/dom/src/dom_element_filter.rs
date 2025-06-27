@@ -134,7 +134,7 @@ fn print_element_as_leaf(r#type: String, config: &Config) -> String {
     let tag_color = &config.colors.tag;
     format!(
         "{} …{}",
-        tag_color.paint(&format!("<{}", r#type)),
+        tag_color.paint(&format!("<{type}")),
         tag_color.paint(" />")
     )
 }

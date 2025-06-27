@@ -314,8 +314,8 @@ fn make_role_selector(role: ByRoleMatcher) -> String {
 fn get_name_hint(name: Option<Matcher>) -> String {
     match name {
         Some(Matcher::String(name)) => format!(" and name \"{name}\""),
-        Some(Matcher::Regex(name)) => format!(" and name `{}`", name),
-        Some(Matcher::Number(name)) => format!(" and name `{}`", name),
+        Some(Matcher::Regex(name)) => format!(" and name `{name}`"),
+        Some(Matcher::Number(name)) => format!(" and name `{name}`"),
         Some(Matcher::Function(_name)) => " and name `Fn`".into(),
         None => "".into(),
     }

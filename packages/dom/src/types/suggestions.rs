@@ -19,7 +19,7 @@ impl Display for Suggestion {
 
         let text = match &self.query_matcher {
             Matcher::String(matcher) => format!("'{matcher}'"),
-            matcher => format!("{}", matcher),
+            matcher => format!("{matcher}"),
         };
 
         let options = ", TODO";
