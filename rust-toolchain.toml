@@ -1,0 +1,16 @@
+[toolchain]
+channel = "stable"
+components = [
+    "rust-analyzer",
+    "rust-src",
+    "rustfmt",
+    "wasm-pack"
+]
+# > https://rust-lang.github.io/rustup/overrides.html#targets 
+# >
+# > The targets setting contains a list of platforms to install for cross-compilation. The value is a list of strings.
+# > The host platform is automatically included; the targets listed here are additive.
+#
+targets = [
+    "wasm32-unknown-unknown"
+]

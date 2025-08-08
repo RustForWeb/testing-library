@@ -164,3 +164,16 @@ book/book/
 
 # Tailwind CSS ouput
 tailwind.output.css
+
+# Ignoring direnv files
+#
+# If you trust this repo enough to run direv, just add the .envrc file in the root with
+# content like
+#
+# ```
+# use flake
+# ```
+#
+# Security wise it's not recommended
+.envrc
+.direnv
