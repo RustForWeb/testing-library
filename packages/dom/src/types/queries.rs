@@ -87,13 +87,13 @@ impl ByRoleOptions {
         self
     }
 
-    pub fn name(mut self, value: Matcher) -> Self {
-        self.name = Some(value);
+    pub fn name<M: Into<Matcher>>(mut self, value: M) -> Self {
+        self.name = Some(value.into());
         self
     }
 
-    pub fn description(mut self, value: Matcher) -> Self {
-        self.description = Some(value);
+    pub fn description<M: Into<Matcher>>(mut self, value: M) -> Self {
+        self.description = Some(value.into());
         self
     }
 }

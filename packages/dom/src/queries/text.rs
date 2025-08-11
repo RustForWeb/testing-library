@@ -16,7 +16,7 @@ pub fn _query_all_by_text<M: Into<Matcher>>(
     options: SelectorMatcherOptions,
 ) -> Result<Vec<HtmlElement>, QueryError> {
     let text = text.into();
-    let selector = options.selector.unwrap_or("*".into());
+    let selector = options.selector.unwrap_or("*".to_owned());
     let ignore = options.ignore.unwrap_or(get_config().default_ignore.into());
     let matcher = match options.exact.unwrap_or(true) {
         true => matches,
@@ -77,7 +77,7 @@ fn get_missing_error(
     let normalized_text = match_normalizer(text.clone());
     let is_normalized_different = normalized_text != text;
 
-    let selector = options.selector.unwrap_or("*".into());
+    let selector = options.selector.unwrap_or("*".to_owned());
     let is_custom_selector = selector != "*";
 
     Ok(format!(
@@ -90,7 +90,7 @@ fn get_missing_error(
         },
         match is_custom_selector {
             true => format!(", which matches selector '{selector}'"),
-            false => "".into(),
+            false => "".to_owned(),
         }
     ))
 }

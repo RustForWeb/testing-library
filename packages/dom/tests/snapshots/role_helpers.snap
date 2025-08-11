@@ -1,0 +1,216 @@
+region:
+
+Name "a region":
+<section
+  aria-label="a region"
+  data-testid="named-section"
+/>
+
+--------------------------------------------------
+link:
+
+Name "link":
+<a
+  data-testid="a-link"
+  href="http://whatever.com"
+/>
+
+--------------------------------------------------
+navigation:
+
+Name "":
+<nav
+  data-testid="a-nav"
+/>
+
+--------------------------------------------------
+heading:
+
+Name "Main Heading":
+<h1
+  data-testid="a-h1"
+/>
+
+Name "Sub Heading":
+<h2
+  data-testid="a-h2"
+/>
+
+Name "Tertiary Heading":
+<h3
+  data-testid="a-h3"
+/>
+
+--------------------------------------------------
+article:
+
+Name "":
+<article
+  data-testid="a-article"
+/>
+
+--------------------------------------------------
+list:
+
+Name "":
+<ul
+  data-testid="a-list"
+/>
+
+Name "":
+<ul
+  data-testid="b-list"
+/>
+
+--------------------------------------------------
+listitem:
+
+Name "":
+<li
+  data-testid="a-list-item-1"
+/>
+
+Name "":
+<li
+  data-testid="a-list-item-2"
+/>
+
+Name "":
+<li
+  data-testid="b-list-item-1"
+/>
+
+Name "":
+<li
+  data-testid="b-list-item-2"
+/>
+
+--------------------------------------------------
+table:
+
+Name "":
+<table
+  data-testid="a-table"
+/>
+
+--------------------------------------------------
+rowgroup:
+
+Name "":
+<tbody
+  data-testid="a-tbody"
+/>
+
+--------------------------------------------------
+row:
+
+Name "Cell 1 Cell 2 Cell 3":
+<tr
+  data-testid="a-row"
+/>
+
+--------------------------------------------------
+cell:
+
+Name "Cell 1":
+<td
+  data-testid="a-cell-1"
+/>
+
+Name "Cell 2":
+<td
+  data-testid="a-cell-2"
+/>
+
+Name "Cell 3":
+<td
+  data-testid="a-cell-3"
+/>
+
+--------------------------------------------------
+form:
+
+Name "a form":
+<form
+  aria-label="a form"
+  data-testid="named-form"
+/>
+
+--------------------------------------------------
+radio:
+
+Name "":
+<input
+  data-testid="a-radio-1"
+  type="radio"
+/>
+
+Name "":
+<input
+  data-testid="a-radio-2"
+  type="radio"
+/>
+
+--------------------------------------------------
+textbox:
+
+Name "":
+<input
+  data-testid="a-input-1"
+  type="text"
+/>
+
+Name "":
+<input
+  data-testid="a-input-2"
+  type="text"
+/>
+
+Name "":
+<textarea
+  data-testid="a-textarea"
+/>
+
+--------------------------------------------------
+term:
+
+Name "":
+<dt
+  data-testid="a-dt"
+/>
+
+--------------------------------------------------
+definition:
+
+Name "":
+<dd
+  data-testid="a-dd"
+/>
+
+--------------------------------------------------
+img:
+
+Name "":
+<img
+  data-testid="a-img-1"
+  src="http://example.com/image.png"
+/>
+
+Name "a meaningful description":
+<img
+  alt="a meaningful description"
+  data-testid="a-img-3"
+  src="http://example.com/image.png"
+/>
+
+--------------------------------------------------
+presentation:
+
+Name "":
+<img
+  alt=""
+  data-testid="a-img-2"
+  src="http://example.com/image.png"
+/>
+
+--------------------------------------------------

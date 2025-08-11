@@ -13,7 +13,7 @@ use web_sys::js_sys::{BigInt, Number, Object};
 
 fn print_number(val: &Number) -> String {
     if Object::is(val, &JsValue::from_f64(-0.0)) {
-        "-0".into()
+        "-0".to_owned()
     } else {
         val.to_string(10)
             .expect("Number should be formatted as string.")
@@ -38,16 +38,16 @@ pub fn print_basic_value(
     escape_string: bool,
 ) -> Option<String> {
     if *val == JsValue::TRUE {
-        return Some("true".into());
+        return Some("true".to_owned());
     }
     if *val == JsValue::FALSE {
-        return Some("false".into());
+        return Some("false".to_owned());
     }
     if val.is_undefined() {
-        return Some("undefined".into());
+        return Some("undefined".to_owned());
     }
     if val.is_null() {
-        return Some("null".into());
+        return Some("null".to_owned());
     }
 
     let type_of = val.js_typeof();
@@ -60,12 +60,13 @@ pub fn print_basic_value(
     }
     if type_of == "string" {
         if escape_string {
-            return Some(
+            return Some(format!(
+                "\"{}\"",
                 val.as_string()
                     .expect("Value should be a string.")
                     .replace('"', "\\\"")
                     .replace('\\', "\\\\"),
-            );
+            ));
         }
         return Some(format!(
             "\"{}\"",
@@ -129,7 +130,7 @@ fn printer(
 fn validate_options(options: &PrettyFormatOptions) -> Result<(), PrettyFormatError> {
     if options.min.is_some() && options.indent.is_some_and(|indent| indent != 0) {
         Err(PrettyFormatError::Configuration(
-            "Options `min` and `indent` cannot be used togther.".into(),
+            "Options `min` and `indent` cannot be used togther.".to_owned(),
         ))
     } else {
         Ok(())
@@ -175,7 +176,7 @@ fn get_config(options: PrettyFormatOptions) -> Config {
         escape_regex: options.escape_regex.unwrap_or(false),
         escape_string: options.escape_string.unwrap_or(true),
         indent: match options.min {
-            Some(true) => "".into(),
+            Some(true) => "".to_owned(),
             _ => create_indent(options.indent.unwrap_or(2)),
         },
         max_depth: options.max_depth.unwrap_or(usize::MAX),
@@ -210,7 +211,7 @@ pub fn format(val: &JsValue, options: PrettyFormatOptions) -> Result<String, Pre
             plugin,
             val,
             &get_config(options),
-            "".into(),
+            "".to_owned(),
             0,
             vec![],
         ));
@@ -228,7 +229,7 @@ pub fn format(val: &JsValue, options: PrettyFormatOptions) -> Result<String, Pre
         Ok(print_complex_value(
             val,
             &get_config(options),
-            "".into(),
+            "".to_owned(),
             0,
             vec![],
             None,

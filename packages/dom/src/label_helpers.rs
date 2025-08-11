@@ -10,7 +10,7 @@ const LABELLED_NODE_NAMES: [&str; 7] = [
 
 fn get_text_content(node: &Node) -> Option<String> {
     if LABELLED_NODE_NAMES.contains(&node.node_name().to_lowercase().as_str()) {
-        Some("".into())
+        Some("".to_owned())
     } else if node.node_type() == Node::TEXT_NODE {
         node.text_content()
     } else {
@@ -62,7 +62,8 @@ fn is_labelable(element: &Element) -> bool {
     Regex::new(r"BUTTON|METER|OUTPUT|PROGRESS|SELECT|TEXTAREA")
         .expect("Regex should be valid.")
         .is_match(&element.tag_name())
-        || element.tag_name() == "INPUT" && element.get_attribute("type") != Some("hidden".into())
+        || element.tag_name() == "INPUT"
+            && element.get_attribute("type") != Some("hidden".to_owned())
 }
 
 #[derive(Clone, Debug)]
@@ -76,7 +77,7 @@ pub fn get_labels(
     element: &HtmlElement,
     selector: Option<String>,
 ) -> Vec<Label> {
-    let selector = selector.unwrap_or("*".into());
+    let selector = selector.unwrap_or("*".to_owned());
 
     let aria_labelled_by = element.get_attribute("aria-labelledby");
     let labels_id = aria_labelled_by
@@ -118,7 +119,7 @@ pub fn get_labels(
                         form_control: None,
                     })
                     .unwrap_or(Label {
-                        content: Some("".into()),
+                        content: Some("".to_owned()),
                         form_control: None,
                     })
             })

@@ -25,7 +25,13 @@ pub use matches::get_default_normalizer;
 pub use pretty_dom::*;
 pub use queries::*;
 pub use query_helpers::*;
-pub use role_helpers::{get_roles, is_inaccessible, log_roles};
+pub use role_helpers::{
+    GetRolesOptions, PrettyRolesOptions, get_implicit_aria_roles, get_roles, is_inaccessible,
+    log_roles,
+};
 pub use suggestions::*;
 pub use types::*;
 pub use wait_for::*;
+
+// TODO: Export useful types from `aria_query`.
+pub use aria_query::{AriaRole, AriaRoleDefinitionKey};

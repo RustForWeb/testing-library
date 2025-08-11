@@ -55,8 +55,8 @@ impl Default for Theme {
             comment: ansi_style::Color::BlackBright.into(),
             content: Color {
                 // Reset
-                open: "\x1B[0m".into(),
-                close: "\x1B[0m".into(),
+                open: "\x1B[0m".to_owned(),
+                close: "\x1B[0m".to_owned(),
             },
             prop: ansi_style::Color::Yellow.into(),
             tag: ansi_style::Color::Cyan.into(),

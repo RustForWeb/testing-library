@@ -15,12 +15,10 @@ pub fn _query_all_by_alt_text<M: Into<Matcher>>(
 ) -> Result<Vec<HtmlElement>, QueryError> {
     let valid_tag_regex = Regex::new(r"^(img|input|area|.+-.+)$").expect("Regex should be valid.");
 
-    Ok(
-        query_all_by_attribute("alt".to_string(), container, alt, options)?
-            .into_iter()
-            .filter(|node| valid_tag_regex.is_match(&node.tag_name()))
-            .collect(),
-    )
+    Ok(query_all_by_attribute("alt", container, alt, options)?
+        .into_iter()
+        .filter(|node| valid_tag_regex.is_match(&node.tag_name()))
+        .collect())
 }
 
 fn get_multiple_error(
