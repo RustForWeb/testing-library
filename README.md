@@ -14,13 +14,13 @@ Rust port of [Testing Library](https://testing-library.com/).
 
 Rust Testing Library is available for these Rust frameworks:
 
--   [DOM](./packages/dom) ([`web-sys`](https://rustwasm.github.io/wasm-bindgen/web-sys/index.html))
+- [DOM](./packages/dom) ([`web-sys`](https://rustwasm.github.io/wasm-bindgen/web-sys/index.html))
 
 The following frameworks are under consideration:
 
--   [Dioxus](https://dioxuslabs.com/)
--   [Leptos](https://leptos.dev/)
--   [Yew](https://yew.rs/)
+- [Dioxus](https://dioxuslabs.com/)
+- [Leptos](https://leptos.dev/)
+- [Yew](https://yew.rs/)
 
 See [the Rust Testing Library book](https://testing-library.rustforweb.org/introduction.html#frameworks) for more information.
 
