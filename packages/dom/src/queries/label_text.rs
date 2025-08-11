@@ -40,15 +40,15 @@ pub fn _query_all_by_label_text<M: Into<Matcher>>(
         let label_list = get_labels(container, &labelled_element, Some(selector.clone()));
 
         for label in &label_list {
-            if let Some(form_control) = label.form_control.as_ref() {
-                if matcher(
+            if let Some(form_control) = label.form_control.as_ref()
+                && matcher(
                     label.content.clone(),
                     label.form_control.as_deref(),
                     &text,
                     match_normalizer.as_ref(),
-                ) {
-                    labelled_elements.push(form_control.clone());
-                }
+                )
+            {
+                labelled_elements.push(form_control.clone());
             }
         }
 

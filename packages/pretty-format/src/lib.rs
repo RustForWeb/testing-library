@@ -203,17 +203,17 @@ fn create_indent(indent: usize) -> String {
 pub fn format(val: &JsValue, options: PrettyFormatOptions) -> Result<String, PrettyFormatError> {
     validate_options(&options)?;
 
-    if let Some(plugins) = &options.plugins {
-        if let Some(plugin) = find_plugin(plugins, val) {
-            return Ok(print_plugin(
-                plugin,
-                val,
-                &get_config(options),
-                "".into(),
-                0,
-                vec![],
-            ));
-        }
+    if let Some(plugins) = &options.plugins
+        && let Some(plugin) = find_plugin(plugins, val)
+    {
+        return Ok(print_plugin(
+            plugin,
+            val,
+            &get_config(options),
+            "".into(),
+            0,
+            vec![],
+        ));
     }
 
     let basic_result = print_basic_value(

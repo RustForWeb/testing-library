@@ -83,12 +83,11 @@ static ELEMENT_ROLE_LIST: LazyLock<Vec<ElementRole>> = LazyLock::new(|| {
 
         result.push(ElementRole {
             r#match: Box::new(move |element| {
-                if type_text_index.is_some() {
-                    if let Some(input_element) = element.dyn_ref::<HtmlInputElement>() {
-                        if input_element.type_() != "text" {
-                            return false;
-                        }
-                    }
+                if type_text_index.is_some()
+                    && let Some(input_element) = element.dyn_ref::<HtmlInputElement>()
+                    && input_element.type_() != "text"
+                {
+                    return false;
                 }
 
                 element.matches(&selector).unwrap_or(false)
