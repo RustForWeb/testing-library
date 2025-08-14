@@ -2,13 +2,17 @@ use std::sync::Arc;
 
 use web_sys::Element;
 
-use crate::error::QueryError;
+use crate::error::{FireEventError, QueryError};
 
 pub type GetElementErrorFn = dyn Fn(Option<String>, Element) -> QueryError + Send + Sync;
+
+pub type EventWrapperFn =
+    dyn Fn(&dyn Fn() -> Result<bool, FireEventError>) -> Result<bool, FireEventError> + Send + Sync;
 
 #[derive(Clone)]
 pub struct Config {
     pub test_id_attribute: String,
+    pub event_wrapper: Arc<EventWrapperFn>,
     // TODO
     /// Default value for the `hidden` option in `by_role` queries.
     pub default_hidden: bool,
@@ -26,6 +30,9 @@ impl Config {
     pub fn update(&mut self, other: PartialConfig) {
         if let Some(test_id_attribute) = other.test_id_attribute {
             self.test_id_attribute = test_id_attribute;
+        }
+        if let Some(event_wrapper) = other.event_wrapper {
+            self.event_wrapper = event_wrapper;
         }
         if let Some(default_hidden) = other.default_hidden {
             self.default_hidden = default_hidden;
@@ -48,6 +55,7 @@ impl Config {
 #[derive(Clone, Default)]
 pub struct PartialConfig {
     pub test_id_attribute: Option<String>,
+    pub event_wrapper: Option<Arc<EventWrapperFn>>,
     // TODO
     /// Default value for the `hidden` option in `by_role` queries.
     pub default_hidden: Option<bool>,
@@ -64,6 +72,11 @@ pub struct PartialConfig {
 impl PartialConfig {
     pub fn test_id_attribute(mut self, value: String) -> Self {
         self.test_id_attribute = Some(value);
+        self
+    }
+
+    pub fn event_wrapper(mut self, value: Arc<EventWrapperFn>) -> Self {
+        self.event_wrapper = Some(value);
         self
     }
 
@@ -97,6 +110,7 @@ impl From<&Config> for PartialConfig {
     fn from(value: &Config) -> Self {
         Self {
             test_id_attribute: Some(value.test_id_attribute.clone()),
+            event_wrapper: Some(value.event_wrapper.clone()),
             default_hidden: Some(value.default_hidden),
             default_ignore: Some(value.default_ignore.clone()),
             show_original_stack_trace: Some(value.show_original_stack_trace),

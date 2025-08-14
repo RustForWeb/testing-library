@@ -1,6 +1,7 @@
 mod config;
 mod dom_element_filter;
 mod error;
+mod events;
 mod get_node_text;
 mod get_queries_for_element;
 mod helpers;
@@ -17,6 +18,7 @@ mod wait_for;
 
 pub use config::{configure, get_config};
 pub use error::QueryError;
+pub use events::*;
 pub use get_node_text::*;
 pub use get_queries_for_element::*;
 pub use matches::get_default_normalizer;

@@ -9,6 +9,7 @@ use crate::{
 static CONFIG: LazyLock<Arc<Mutex<Config>>> = LazyLock::new(|| {
     Arc::new(Mutex::new(Config {
         test_id_attribute: "data-testid".into(),
+        event_wrapper: Arc::new(|cb| cb()),
         default_hidden: false,
         default_ignore: "script, style".into(),
         show_original_stack_trace: false,
