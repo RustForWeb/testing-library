@@ -3,10 +3,11 @@ use wasm_bindgen::JsValue;
 use web_sys::{
     AnimationEvent, AnimationEventInit, ClipboardEvent, ClipboardEventInit, CompositionEvent,
     CompositionEventInit, DragEvent, DragEventInit, Event, EventInit, EventTarget, FocusEvent,
-    FocusEventInit, InputEvent, InputEventInit, KeyboardEvent, KeyboardEventInit, MouseEvent,
-    MouseEventInit, PageTransitionEvent, PageTransitionEventInit, PointerEvent, PointerEventInit,
-    PopStateEvent, PopStateEventInit, ProgressEvent, ProgressEventInit, TouchEvent, TouchEventInit,
-    TransitionEvent, TransitionEventInit, UiEvent, UiEventInit, WheelEvent, WheelEventInit,
+    FocusEventInit, InputEvent, InputEventInit, KeyboardEvent, KeyboardEventInit, MessageEvent,
+    MessageEventInit, MouseEvent, MouseEventInit, PageTransitionEvent, PageTransitionEventInit,
+    PointerEvent, PointerEventInit, PopStateEvent, PopStateEventInit, ProgressEvent,
+    ProgressEventInit, TouchEvent, TouchEventInit, TransitionEvent, TransitionEventInit, UiEvent,
+    UiEventInit, WheelEvent, WheelEventInit,
 };
 
 use crate::{
@@ -282,6 +283,7 @@ generate_event_types!(
     (FocusEvent, new_with_focus_event_init_dict),
     (InputEvent, new_with_event_init_dict),
     (KeyboardEvent, new_with_keyboard_event_init_dict),
+    (MessageEvent, new_with_event_init_dict),
     (MouseEvent, new_with_mouse_event_init_dict),
     (PageTransitionEvent, new_with_event_init_dict),
     (PointerEvent, new_with_event_init_dict),

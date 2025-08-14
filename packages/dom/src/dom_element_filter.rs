@@ -5,14 +5,15 @@ use regex::Regex;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{Comment, Element, Node, Text};
 
-use crate::util::{named_node_map_to_hashmap, node_list_to_vec};
+use crate::util::{named_node_map_to_hashmap, named_node_map_to_vec, node_list_to_vec};
 
 fn escape_html(text: String) -> String {
     text.replace('<', "&lt;").replace('>', "&gt;")
 }
 
 fn print_props(
-    attributes: HashMap<String, String>,
+    keys: Vec<String>,
+    props: HashMap<String, String>,
     config: &Config,
     indentation: String,
     depth: usize,
@@ -21,25 +22,26 @@ fn print_props(
 ) -> String {
     let indentation_next = format!("{}{}", indentation, config.indent);
 
-    attributes
-        .into_iter()
-        .map(|(key, value)| {
-            let printed = printer(
-                &JsValue::from_str(&value),
-                config,
-                indentation_next.clone(),
-                depth,
-                refs.clone(),
-                None,
-            );
+    keys.into_iter()
+        .filter_map(|key| {
+            props.get(&key).map(|value| {
+                let printed = printer(
+                    &JsValue::from_str(value),
+                    config,
+                    indentation_next.clone(),
+                    depth,
+                    refs.clone(),
+                    None,
+                );
 
-            format!(
-                "{}{}{}={}",
-                config.spacing_inner,
-                indentation,
-                config.colors.prop.paint(&key),
-                config.colors.value.paint(&printed)
-            )
+                format!(
+                    "{}{}{}={}",
+                    config.spacing_inner,
+                    indentation,
+                    config.colors.prop.paint(&key),
+                    config.colors.value.paint(&printed)
+                )
+            })
         })
         .collect::<Vec<_>>()
         .join("")
@@ -67,7 +69,7 @@ fn print_children(
 
             if printed_child.is_empty() && child.node_type() != Node::TEXT_NODE {
                 // A plugin serialized this Node to '' meaning we should ignore it.
-                "".into()
+                "".to_owned()
             } else {
                 format!("{}{}{}", config.spacing_outer, indentation, printed_child)
             }
@@ -99,7 +101,7 @@ fn print_element(
         "<{}{}{}>",
         r#type,
         if printed_props.is_empty() {
-            "".into()
+            "".to_owned()
         } else {
             format!(
                 "{}{}{}{}{}",
@@ -112,9 +114,9 @@ fn print_element(
         },
         if printed_children.is_empty() {
             if !printed_props.is_empty() && !config.min {
-                "/".into()
+                "/".to_owned()
             } else {
-                " /".into()
+                " /".to_owned()
             }
         } else {
             format!(
@@ -207,7 +209,7 @@ impl Plugin for DomElementFilter {
         }
 
         let r#type = if node_is_fragment(node) {
-            "DocumentFragment".into()
+            "DocumentFragment".to_owned()
         } else {
             node.unchecked_ref::<Element>().tag_name().to_lowercase()
         };
@@ -220,6 +222,19 @@ impl Plugin for DomElementFilter {
         print_element(
             r#type,
             print_props(
+                if node_is_fragment(node) {
+                    vec![]
+                } else {
+                    let mut keys =
+                        named_node_map_to_vec(node.unchecked_ref::<Element>().attributes())
+                            .into_iter()
+                            .map(|attr| attr.name())
+                            .collect::<Vec<_>>();
+
+                    keys.sort();
+
+                    keys
+                },
                 if node_is_fragment(node) {
                     HashMap::new()
                 } else {

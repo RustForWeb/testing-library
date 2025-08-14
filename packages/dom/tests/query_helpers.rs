@@ -18,7 +18,7 @@ trait GetElementError {
 
 #[wasm_bindgen_test]
 fn should_delegate_to_config_get_element_error() {
-    let message = Some("test Message".to_string());
+    let message = Some("test Message".to_owned());
     let container = Document::new()
         .expect("Document should be created.")
         .create_element("div")
@@ -32,7 +32,7 @@ fn should_delegate_to_config_get_element_error() {
 
             move |m, c| *m == message && *c == container
         })
-        .returning(|_, _| QueryError::Element("".into()));
+        .returning(|_, _| QueryError::Element("".to_owned()));
 
     configure(ConfigFnOrPartial::Partial(
         PartialConfig::default().get_element_error(Arc::new(|message, container| {

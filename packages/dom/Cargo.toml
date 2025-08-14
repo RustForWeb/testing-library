@@ -10,15 +10,17 @@ repository.workspace = true
 version.workspace = true
 
 [dependencies]
-aria-query = "0.0.4"
+aria-query = "0.0.5"
 dom-accessibility-api = "0.0.3"
 log.workspace = true
+ordered_hash_map = "0.4.0"
 paste = "1.0.15"
 pretty-format = { path = "../pretty-format", version = "0.0.1" }
 regex.workspace = true
 thiserror.workspace = true
 wasm-bindgen.workspace = true
 web-sys = { workspace = true, features = [
+    "AddEventListenerOptions",
     "AnimationEvent",
     "AnimationEventInit",
     "Attr",
@@ -48,6 +50,8 @@ web-sys = { workspace = true, features = [
     "InputEventInit",
     "KeyboardEvent",
     "KeyboardEventInit",
+    "MessageEvent",
+    "MessageEventInit",
     "MouseEvent",
     "MouseEventInit",
     "NamedNodeMap",
@@ -75,7 +79,9 @@ web-sys = { workspace = true, features = [
 [dev-dependencies]
 indoc = "2.0.5"
 mockall = "0.13.0"
+pretty_assertions = "1.4.1"
 send_wrapper = "0.6.0"
+testing_logger = "0.1.1"
 wasm-bindgen-test.workspace = true
 
 [lints.rust]

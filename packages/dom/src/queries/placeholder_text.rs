@@ -12,7 +12,7 @@ pub fn _query_all_by_placeholder_text<M: Into<Matcher>>(
     text: M,
     options: MatcherOptions,
 ) -> Result<Vec<HtmlElement>, QueryError> {
-    query_all_by_attribute("placeholder".to_string(), container, text, options)
+    query_all_by_attribute("placeholder", container, text, options)
 }
 
 fn get_multiple_error(

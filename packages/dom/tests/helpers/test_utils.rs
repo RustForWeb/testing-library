@@ -1,9 +1,6 @@
-// TODO: remove
-#![allow(dead_code)]
-
 use testing_library_dom::{BoundFunctions, get_queries_for_element};
 use wasm_bindgen::JsCast;
-use web_sys::{Document, Element, HtmlElement, window};
+use web_sys::{Document, HtmlElement, window};
 
 pub fn document() -> Document {
     window()
@@ -13,22 +10,22 @@ pub fn document() -> Document {
 }
 
 pub struct RenderReturn {
-    pub container: Element,
+    pub container: HtmlElement,
     pub container_queries: BoundFunctions,
     pub rerender: Box<dyn Fn(&str) -> RenderReturn>,
 }
 
-pub fn render(html: &str, container: Option<Element>) -> RenderReturn {
+pub fn render(html: &str, container: Option<HtmlElement>) -> RenderReturn {
     let container = container.unwrap_or_else(|| {
         document()
             .create_element("div")
             .expect("Element should be created.")
+            .unchecked_into::<HtmlElement>()
     });
 
     container.set_inner_html(html);
 
-    let container_queries =
-        get_queries_for_element(container.clone().unchecked_into::<HtmlElement>());
+    let container_queries = get_queries_for_element(container.clone());
 
     RenderReturn {
         container: container.clone(),
@@ -38,10 +35,22 @@ pub fn render(html: &str, container: Option<Element>) -> RenderReturn {
 }
 
 pub fn render_into_document(html: &str) -> RenderReturn {
-    render(
-        html,
-        Some(document().body().expect("Body should exist.").into()),
-    )
+    render(html, Some(document().body().expect("Body should exist.")))
+}
+
+pub fn render_into_document_div(html: &str) -> RenderReturn {
+    // `wasm-pack test` crashes when its `pre` elements are overwritten, so use a `div` instead.
+    let container = document()
+        .create_element("div")
+        .expect("Element should be created.")
+        .unchecked_into::<HtmlElement>();
+    document()
+        .body()
+        .expect("Body should exist.")
+        .append_child(&container)
+        .expect("Child should be appended.");
+
+    render(html, Some(container))
 }
 
 pub fn cleanup() {

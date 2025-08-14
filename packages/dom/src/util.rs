@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use wasm_bindgen::JsCast;
-use web_sys::{HtmlCollection, NamedNodeMap, NodeList};
+use web_sys::{Attr, HtmlCollection, NamedNodeMap, NodeList};
 
 pub fn html_collection_to_vec<T: JsCast>(collection: HtmlCollection) -> Vec<T> {
     let mut result = Vec::with_capacity(
@@ -17,6 +17,20 @@ pub fn html_collection_to_vec<T: JsCast>(collection: HtmlCollection) -> Vec<T> {
                 .expect("Item should exist.")
                 .unchecked_into::<T>(),
         );
+    }
+    result
+}
+
+pub fn named_node_map_to_vec(named_node_map: NamedNodeMap) -> Vec<Attr> {
+    let mut result = Vec::with_capacity(
+        named_node_map
+            .length()
+            .try_into()
+            .expect("usize should be at least u32."),
+    );
+    for i in 0..named_node_map.length() {
+        let attr = named_node_map.item(i).expect("Item should exist.");
+        result.push(attr);
     }
     result
 }

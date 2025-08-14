@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::LazyLock};
+use std::{hash::RandomState, sync::LazyLock};
 
 use aria_query::{
     AriaRoleDefinitionKey, AriaRoleRelationConcept, AriaRoleRelationConceptAttributeConstraint,
@@ -7,6 +7,7 @@ use aria_query::{
 use dom_accessibility_api::{
     ComputeTextAlternativeOptions, compute_accessible_description, compute_accessible_name,
 };
+use ordered_hash_map::OrderedHashMap;
 use wasm_bindgen::JsCast;
 use web_sys::{Element, HtmlElement, HtmlInputElement, HtmlOptionElement};
 
@@ -84,8 +85,9 @@ static ELEMENT_ROLE_LIST: LazyLock<Vec<ElementRole>> = LazyLock::new(|| {
         result.push(ElementRole {
             r#match: Box::new(move |element| {
                 if type_text_index.is_some()
-                    && let Some(input_element) = element.dyn_ref::<HtmlInputElement>()
-                    && input_element.type_() != "text"
+                    && element
+                        .dyn_ref::<HtmlInputElement>()
+                        .is_none_or(|input_element| input_element.type_() != "text")
                 {
                     return false;
                 }
@@ -110,7 +112,7 @@ pub fn is_subtree_inaccessible(element: &Element) -> bool {
         return true;
     }
 
-    if element.get_attribute("aria-hidden") == Some("true".into()) {
+    if element.get_attribute("aria-hidden") == Some("true".to_owned()) {
         return true;
     }
 
@@ -189,7 +191,7 @@ pub struct GetRolesOptions {
 pub fn get_roles(
     container: Element,
     options: GetRolesOptions,
-) -> HashMap<AriaRoleDefinitionKey, Vec<Element>> {
+) -> OrderedHashMap<AriaRoleDefinitionKey, Vec<Element>, RandomState> {
     fn flatten_dom(element: Element) -> Vec<Element> {
         let mut elements = vec![element.clone()];
         elements.extend(
@@ -206,28 +208,36 @@ pub fn get_roles(
     flatten_dom(container)
         .into_iter()
         .filter(|element| hidden || !is_inaccessible(element))
-        .fold(HashMap::new(), |mut acc, element| {
-            // TODO: This violates html-aria which does not allow any role on every element.
-            let roles = if element.has_attribute("role") {
-                element
-                    .get_attribute("role")
-                    .expect("Attribute should exist.")
-                    .split(' ')
-                    .filter_map(|role| role.parse::<AriaRoleDefinitionKey>().ok())
-                    .take(1)
-                    .collect::<Vec<_>>()
-            } else {
-                get_implicit_aria_roles(&element)
-            };
+        .fold(
+            OrderedHashMap::with_hasher(RandomState::new()),
+            |mut acc, element| {
+                // TODO: This violates html-aria which does not allow any role on every element.
+                let roles = if element.has_attribute("role") {
+                    element
+                        .get_attribute("role")
+                        .expect("Attribute should exist.")
+                        .split(' ')
+                        .filter_map(|role| role.parse::<AriaRoleDefinitionKey>().ok())
+                        .take(1)
+                        .collect::<Vec<_>>()
+                } else {
+                    get_implicit_aria_roles(&element)
+                };
 
-            for role in roles {
-                acc.entry(role)
-                    .and_modify(|entry| entry.push(element.clone()))
-                    .or_insert_with(|| vec![element.clone()]);
-            }
+                for role in roles {
+                    match acc.get_mut(&role) {
+                        Some(entry) => {
+                            entry.push(element.clone());
+                        }
+                        None => {
+                            acc.insert(role, vec![element.clone()]);
+                        }
+                    }
+                }
 
-            acc
-        })
+                acc
+            },
+        )
 }
 
 #[derive(Clone, Default)]

@@ -22,7 +22,7 @@ pub fn get_multiple_elements_found_error(message: String, container: Element) ->
 }
 
 pub fn query_all_by_attribute<M: Into<Matcher>>(
-    attribute: String,
+    attribute: &str,
     container: &HtmlElement,
     text: M,
     MatcherOptions {
@@ -54,7 +54,7 @@ pub fn query_all_by_attribute<M: Into<Matcher>>(
     .into_iter()
     .filter(|node| {
         matcher(
-            node.get_attribute(&attribute),
+            node.get_attribute(attribute),
             Some(node),
             &text,
             match_normalizer.as_ref(),
@@ -64,14 +64,14 @@ pub fn query_all_by_attribute<M: Into<Matcher>>(
 }
 
 pub fn query_by_attribute<M: Into<Matcher>>(
-    attribute: String,
+    attribute: &str,
     container: &HtmlElement,
     text: M,
     options: MatcherOptions,
 ) -> Result<Option<HtmlElement>, QueryError> {
     let text = text.into();
 
-    let mut els = query_all_by_attribute(attribute.clone(), container, text.clone(), options)?;
+    let mut els = query_all_by_attribute(attribute, container, text.clone(), options)?;
     if els.len() > 1 {
         Err(get_multiple_elements_found_error(
             format!("Found multiple elements by [{attribute}={text}]"),

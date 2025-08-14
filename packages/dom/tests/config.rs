@@ -61,7 +61,7 @@ fn configure_overrides_existing_values() {
     let lock = before_each();
 
     configure(ConfigFnOrPartial::Partial(
-        PartialConfig::default().test_id_attribute("new-id".into()),
+        PartialConfig::default().test_id_attribute("new-id".to_owned()),
     ));
 
     let config = get_config();

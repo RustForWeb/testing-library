@@ -53,7 +53,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaSelected))
     {
         return Err(QueryError::Unsupported(format!(
-            "`aria-selected` is not supported on role \"{role}\"."
+            "\"aria-selected\" is not supported on role \"{role}\"."
         )));
     }
 
@@ -64,7 +64,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaBusy))
     {
         return Err(QueryError::Unsupported(format!(
-            "`aria-busy` is not supported on role \"{role}\"."
+            "\"aria-busy\" is not supported on role \"{role}\"."
         )));
     }
 
@@ -75,7 +75,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaChecked))
     {
         return Err(QueryError::Unsupported(format!(
-            "`aria-checked` is not supported on role \"{role}\"."
+            "\"aria-checked\" is not supported on role \"{role}\"."
         )));
     }
 
@@ -86,7 +86,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaPressed))
     {
         return Err(QueryError::Unsupported(format!(
-            "`aria-pressed` is not supported on role \"{role}\"."
+            "\"aria-pressed\" is not supported on role \"{role}\"."
         )));
     }
 
@@ -99,7 +99,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaCurrent))
     {
         return Err(QueryError::Unsupported(format!(
-            "`aria-current` is not supported on role \"{role}\"."
+            "\"aria-current\" is not supported on role \"{role}\"."
         )));
     }
 
@@ -117,7 +117,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaValuenow))
     {
         return Err(QueryError::Unsupported(format!(
-            "`aria-valuenow` is not supported on role \"{role}\"."
+            "\"aria-valuenow\" is not supported on role \"{role}\"."
         )));
     }
 
@@ -128,7 +128,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaValuemax))
     {
         return Err(QueryError::Unsupported(format!(
-            "`aria-valuemax` is not supported on role \"{role}\"."
+            "\"aria-valuemax\" is not supported on role \"{role}\"."
         )));
     }
 
@@ -139,7 +139,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaValuemin))
     {
         return Err(QueryError::Unsupported(format!(
-            "`aria-valuemin` is not supported on role \"{role}\"."
+            "\"aria-valuemin\" is not supported on role \"{role}\"."
         )));
     }
 
@@ -150,7 +150,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaValuetext))
     {
         return Err(QueryError::Unsupported(format!(
-            "`aria-valuetext` is not supported on role \"{role}\"."
+            "\"aria-valuetext\" is not supported on role \"{role}\"."
         )));
     }
 
@@ -161,7 +161,7 @@ pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
             .is_some_and(|role| role.props.contains_key(&AriaProperty::AriaExpanded))
     {
         return Err(QueryError::Unsupported(format!(
-            "`aria-expanded` is not supported on role \"{role}\"."
+            "\"aria-expanded\" is not supported on role \"{role}\"."
         )));
     }
 
@@ -316,8 +316,8 @@ fn get_name_hint(name: Option<Matcher>) -> String {
         Some(Matcher::String(name)) => format!(" and name \"{name}\""),
         Some(Matcher::Regex(name)) => format!(" and name `{name}`"),
         Some(Matcher::Number(name)) => format!(" and name `{name}`"),
-        Some(Matcher::Function(_name)) => " and name `Fn`".into(),
-        None => "".into(),
+        Some(Matcher::Function(_name)) => " and name `Fn`".to_owned(),
+        None => "".to_owned(),
     }
 }
 

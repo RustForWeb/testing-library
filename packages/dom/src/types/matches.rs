@@ -20,7 +20,7 @@ impl Display for Matcher {
             f,
             "{}",
             match self {
-                Self::Function(_) => "MatcherFn".to_string(),
+                Self::Function(_) => "MatcherFn".to_owned(),
                 Self::Regex(regex) => regex.to_string(),
                 Self::Number(n) => n.to_string(),
                 Self::String(s) => s.clone(),
@@ -155,8 +155,8 @@ impl SelectorMatcherOptions {
         self
     }
 
-    pub fn selector(mut self, value: String) -> Self {
-        self.selector = Some(value);
+    pub fn selector(mut self, value: &str) -> Self {
+        self.selector = Some(value.to_owned());
         self
     }
 

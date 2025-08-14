@@ -17,7 +17,7 @@ pub fn _query_all_by_test_id<M: Into<Matcher>>(
     id: M,
     options: MatcherOptions,
 ) -> Result<Vec<HtmlElement>, QueryError> {
-    query_all_by_attribute(get_test_id_attribute(), container, id, options)
+    query_all_by_attribute(&get_test_id_attribute(), container, id, options)
 }
 
 fn get_multiple_error(

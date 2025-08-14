@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 use pretty_format::PrettyFormatOptions;
 use wasm_bindgen::{JsCast, JsValue};
-use web_sys::{Document, Element, Node};
+use web_sys::{Document, Element, HtmlElement, Node};
 
 use crate::{config::get_config, dom_element_filter::DomElementFilter, helpers::get_document};
 
@@ -20,6 +20,12 @@ impl From<Document> for DocumentOrElement {
 impl From<Element> for DocumentOrElement {
     fn from(value: Element) -> Self {
         Self::Element(value)
+    }
+}
+
+impl From<HtmlElement> for DocumentOrElement {
+    fn from(value: HtmlElement) -> Self {
+        Self::Element(value.into())
     }
 }
 
@@ -50,7 +56,7 @@ pub fn pretty_dom(dom: Option<DocumentOrElement>, max_length: Option<usize>) -> 
     let max_length = max_length.unwrap_or(7000);
 
     if max_length == 0 {
-        return "".into();
+        return "".to_owned();
     }
 
     let dom: JsValue = match dom {

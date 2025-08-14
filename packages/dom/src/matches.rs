@@ -88,7 +88,7 @@ pub fn make_normalizer(
                 `trim` and `collapse_whitespace` are not supported with a normalizer. \n\
                 If you want to use the default trim and `collapse_whitespace logic in your normalizer, \n\
                 use `get_default_normalizer(DefaultNormalizerOptions {trim, collapse_whitespace})` and compose that into your normalizer.\
-            ".into()))
+            ".to_owned()))
         } else {
             Ok(normalizer)
         }
@@ -125,15 +125,15 @@ mod tests {
     #[wasm_bindgen_test]
     fn matchers_accept_strings() {
         assert!(matches(
-            Some("ABC".into()),
+            Some("ABC".to_owned()),
             None,
-            &Matcher::String("ABC".into()),
+            &Matcher::String("ABC".to_owned()),
             &normalizer,
         ));
         assert!(fuzzy_matches(
-            Some("ABC".into()),
+            Some("ABC".to_owned()),
             None,
-            &Matcher::String("ABC".into()),
+            &Matcher::String("ABC".to_owned()),
             &normalizer,
         ));
     }
@@ -141,13 +141,13 @@ mod tests {
     #[wasm_bindgen_test]
     fn matchers_accept_regex() {
         assert!(matches(
-            Some("ABC".into()),
+            Some("ABC".to_owned()),
             None,
             &Matcher::Regex(Regex::new("ABC").expect("Regex should be valid.")),
             &normalizer,
         ));
         assert!(fuzzy_matches(
-            Some("ABC".into()),
+            Some("ABC".to_owned()),
             None,
             &Matcher::Regex(Regex::new("ABC").expect("Regex should be valid.")),
             &normalizer,
@@ -157,13 +157,13 @@ mod tests {
     #[wasm_bindgen_test]
     fn matchers_accept_functions() {
         assert!(matches(
-            Some("ABC".into()),
+            Some("ABC".to_owned()),
             None,
             &Matcher::Function(Rc::new(|text, _| text == "ABC")),
             &normalizer,
         ));
         assert!(fuzzy_matches(
-            Some("ABC".into()),
+            Some("ABC".to_owned()),
             None,
             &Matcher::Function(Rc::new(|text, _| text == "ABC")),
             &normalizer,
@@ -175,13 +175,13 @@ mod tests {
         assert!(!matches(
             None,
             None,
-            &Matcher::String("ABC".into()),
+            &Matcher::String("ABC".to_owned()),
             &normalizer,
         ));
         assert!(!fuzzy_matches(
             None,
             None,
-            &Matcher::String("ABC".into()),
+            &Matcher::String("ABC".to_owned()),
             &normalizer,
         ));
     }

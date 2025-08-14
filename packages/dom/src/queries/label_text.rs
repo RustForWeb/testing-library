@@ -16,7 +16,7 @@ pub fn _query_all_by_label_text<M: Into<Matcher>>(
     options: SelectorMatcherOptions,
 ) -> Result<Vec<HtmlElement>, QueryError> {
     let text = text.into();
-    let selector = options.selector.unwrap_or("*".into());
+    let selector = options.selector.unwrap_or("*".to_owned());
     let matcher = match options.exact.unwrap_or(true) {
         true => matches,
         false => fuzzy_matches,
@@ -99,7 +99,7 @@ pub fn _query_all_by_label_text<M: Into<Matcher>>(
     });
 
     matching_labelled_elements.append(&mut query_all_by_attribute(
-        "aria-label".into(),
+        "aria-label",
         container,
         text,
         MatcherOptions {
