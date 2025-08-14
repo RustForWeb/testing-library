@@ -19,11 +19,24 @@ regex.workspace = true
 thiserror.workspace = true
 wasm-bindgen.workspace = true
 web-sys = { workspace = true, features = [
+    "AnimationEvent",
+    "AnimationEventInit",
     "Attr",
+    "ClipboardEvent",
+    "ClipboardEventInit",
     "Comment",
+    "CompositionEvent",
+    "CompositionEventInit",
     "Document",
     "DocumentFragment",
+    "DragEvent",
+    "DragEventInit",
     "Element",
+    "Event",
+    "EventInit",
+    "EventTarget",
+    "FocusEvent",
+    "FocusEventInit",
     "HtmlCollection",
     "HtmlElement",
     "HtmlInputElement",
@@ -31,15 +44,38 @@ web-sys = { workspace = true, features = [
     "HtmlOptionElement",
     "HtmlOptionsCollection",
     "HtmlSelectElement",
+    "InputEvent",
+    "InputEventInit",
+    "KeyboardEvent",
+    "KeyboardEventInit",
+    "MouseEvent",
+    "MouseEventInit",
     "NamedNodeMap",
     "NodeList",
+    "PageTransitionEvent",
+    "PageTransitionEventInit",
+    "PointerEvent",
+    "PointerEventInit",
+    "PopStateEvent",
+    "PopStateEventInit",
+    "ProgressEvent",
+    "ProgressEventInit",
     "Text",
+    "TouchEvent",
+    "TouchEventInit",
+    "TransitionEvent",
+    "TransitionEventInit",
+    "UiEvent",
+    "UiEventInit",
+    "WheelEvent",
+    "WheelEventInit",
     "Window",
 ] }
 
 [dev-dependencies]
 indoc = "2.0.5"
 mockall = "0.13.0"
+send_wrapper = "0.6.0"
 wasm-bindgen-test.workspace = true
 
 [lints.rust]
