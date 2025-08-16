@@ -46,16 +46,19 @@ impl<'a, E: EventType> Default for CreateEventOptions<'a, E> {
 pub fn create_event<E: EventType>(
     event_name: &str,
     _node: &EventTarget,
-    init: Option<E::Init>,
+    init: Option<&E::Init>,
     options: CreateEventOptions<E>,
 ) -> Result<E, CreateEventError> {
-    let event_init = init.unwrap_or_default();
+    let event_init = match init {
+        Some(init) => init,
+        None => &E::Init::default(),
+    };
 
     if let Some(default_init) = options.default_init {
-        default_init(&event_init);
+        default_init(event_init);
     }
 
-    E::new(event_name, &event_init).map_err(CreateEventError::JsError)
+    E::new(event_name, event_init).map_err(CreateEventError::JsError)
 }
 
 pub struct CreateEvent;
@@ -81,7 +84,7 @@ macro_rules! generate_events {
                         create_event($event_name, node, None, CreateEventOptions::default().default_init(&[<$key default_init>]))
                     }
 
-                    pub fn [<$key _with_init>](node: &EventTarget, init: [<$event_type Init>]) -> Result<$event_type, CreateEventError> {
+                    pub fn [<$key _with_init>](node: &EventTarget, init: &[<$event_type Init>]) -> Result<$event_type, CreateEventError> {
                         create_event($event_name, node, Some(init), CreateEventOptions::default().default_init(&[<$key default_init>]))
                     }
                 )*
@@ -93,7 +96,7 @@ macro_rules! generate_events {
                         Ok(fire_event(node, &CreateEvent::$key(node)?)?)
                     }
 
-                    pub fn [<$key _with_init>](node: &EventTarget, init: [<$event_type Init>]) -> Result<bool, CreateOrFireEventError> {
+                    pub fn [<$key _with_init>](node: &EventTarget, init: &[<$event_type Init>]) -> Result<bool, CreateOrFireEventError> {
                         Ok(fire_event(node, &CreateEvent::[<$key _with_init>](node, init)?)?)
                     }
                 )*
@@ -224,7 +227,7 @@ impl CreateEvent {
 
     pub fn double_click_with_init(
         node: &EventTarget,
-        init: MouseEventInit,
+        init: &MouseEventInit,
     ) -> Result<MouseEvent, CreateEventError> {
         CreateEvent::dbl_click_with_init(node, init)
     }
@@ -238,7 +241,7 @@ impl FireEvent {
 
     pub fn double_click_with_init(
         node: &EventTarget,
-        init: MouseEventInit,
+        init: &MouseEventInit,
     ) -> Result<bool, CreateOrFireEventError> {
         FireEvent::dbl_click_with_init(node, init)
     }

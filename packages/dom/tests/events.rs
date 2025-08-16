@@ -110,7 +110,7 @@ fn fires_history_popstate_event_on_window() {
 
     let init = PopStateEventInit::new();
     init.set_state(&state);
-    FireEvent::pop_state_with_init(&window, init).expect("Event should be fired.");
+    FireEvent::pop_state_with_init(&window, &init).expect("Event should be fired.");
 
     window
         .remove_event_listener_with_callback("popstate", listener.as_ref().unchecked_ref())
@@ -156,7 +156,7 @@ fn fires_events_on_document() {
 
     let init = KeyboardEventInit::new();
     init.set_key("Escape");
-    FireEvent::key_down_with_init(&document, init).expect("Event should be fired.");
+    FireEvent::key_down_with_init(&document, &init).expect("Event should be fired.");
 
     document
         .remove_event_listener_with_callback("keydown", listener.as_ref().unchecked_ref())
