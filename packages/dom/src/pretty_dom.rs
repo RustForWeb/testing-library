@@ -86,3 +86,8 @@ pub fn pretty_dom(dom: Option<DocumentOrElement>, max_length: Option<usize>) -> 
         debug_content
     }
 }
+
+pub fn log_dom(dom: Option<DocumentOrElement>, max_length: Option<usize>) {
+    // TODO: User code frame.
+    log::info!("{}", pretty_dom(dom, max_length));
+}
