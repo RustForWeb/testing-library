@@ -435,64 +435,64 @@ fn can_get_form_controls_by_label_text() {
         container_queries
             .get_by_label_text("1st", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("first-id".to_owned())
+            .id(),
+        "first-id"
     );
     assert_eq!(
         container_queries
             .get_by_label_text("2nd", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("second-id".to_owned())
+            .id(),
+        "second-id"
     );
     assert_eq!(
         container_queries
             .get_by_label_text("3rd", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("third-id".to_owned())
+            .id(),
+        "third-id"
     );
     assert_eq!(
         container_queries
             .get_by_label_text("4th", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("fourth-id".to_owned())
+            .id(),
+        "fourth-id"
     );
     assert_eq!(
         container_queries
             .get_by_label_text("5th one", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("fifth-id".to_owned())
+            .id(),
+        "fifth-id"
     );
     assert_eq!(
         container_queries
             .get_by_label_text("5th two", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("fifth-id".to_owned())
+            .id(),
+        "fifth-id"
     );
     assert_eq!(
         container_queries
             .get_by_label_text("6th one", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("sixth-id".to_owned())
+            .id(),
+        "sixth-id"
     );
     assert_eq!(
         container_queries
             .get_by_label_text("6th two", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("sixth-id".to_owned())
+            .id(),
+        "sixth-id"
     );
     assert_eq!(
         container_queries
             .get_by_label_text("6th one 6th two", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("sixth-id".to_owned())
+            .id(),
+        "sixth-id"
     );
     assert_eq!(
         container_queries
@@ -501,22 +501,22 @@ fn can_get_form_controls_by_label_text() {
                 SelectorMatcherOptions::default()
             )
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("sixth-id".to_owned())
+            .id(),
+        "sixth-id"
     );
     assert_eq!(
         container_queries
             .get_by_label_text("7th one", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("seventh-id".to_owned())
+            .id(),
+        "seventh-id"
     );
     assert_eq!(
         container_queries
             .get_by_label_text("8th one", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("eighth.id".to_owned())
+            .id(),
+        "eighth.id"
     );
 }
 
@@ -553,8 +553,8 @@ fn can_get_elements_labelled_with_aria_labelledby_attribute() {
         container_queries
             .get_by_label_text("Section One", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.id()),
-        Some("section-one".to_owned())
+            .id(),
+        "section-one"
     );
 }
 
@@ -649,8 +649,8 @@ fn can_find_any_labelable_element_when_label_text_is_inside_other_elements() {
                     SelectorMatcherOptions::default().selector(node_type)
                 )
                 .expect("Get should succeed.")
-                .map(|element| element.node_name()),
-            Some(node_type.to_uppercase())
+                .node_name(),
+            node_type.to_uppercase()
         );
     }
 }
@@ -683,8 +683,8 @@ fn returns_the_labelable_element_control_inside_a_label() {
         container_queries
             .get_by_label_text("Test Label", SelectorMatcherOptions::default())
             .expect("Get should succeed.")
-            .map(|element| element.node_name()),
-        Some("BUTTON".to_owned())
+            .node_name(),
+        "BUTTON"
     );
 }
 
@@ -742,10 +742,7 @@ fn can_find_the_correct_element_when_there_are_multiple_matching_labels() {
         )
         .expect("Get should succeed.");
 
-    assert_eq!(
-        result.map(|element| element.node_name()),
-        Some("INPUT".to_owned())
-    );
+    assert_eq!(result.node_name(), "INPUT");
 }
 
 #[wasm_bindgen_test]

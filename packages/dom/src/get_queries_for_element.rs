@@ -19,29 +19,29 @@ macro_rules! queries_for_element {
     ($(($name:ident, $matcher_type:ty, $options_type:ty)),*,) => {
         paste::paste! {
             impl BoundFunctions {
-                $(pub fn [< find_by_ $name >]<M: Into<$matcher_type>>(
+                $(pub async fn [< find_by_ $name >]<M: Into<$matcher_type>>(
                     &self,
                     matcher: M,
                     options: $options_type,
                     wait_for_options: WaitForOptions,
-                ) -> Result<Option<HtmlElement>, QueryError> {
-                    [< find_by_ $name >](&self.element, matcher, options, wait_for_options)
+                ) -> Result<HtmlElement, QueryError> {
+                    [< find_by_ $name >](&self.element, matcher, options, wait_for_options).await
                 })*
 
-                $(pub fn [< find_all_by_ $name >]<M: Into<$matcher_type>>(
+                $(pub async fn [< find_all_by_ $name >]<M: Into<$matcher_type>>(
                     &self,
                     matcher: M,
                     options: $options_type,
                     wait_for_options: WaitForOptions,
                 ) -> Result<Vec<HtmlElement>, QueryError> {
-                    [< find_all_by_ $name >](&self.element, matcher, options, wait_for_options)
+                    [< find_all_by_ $name >](&self.element, matcher, options, wait_for_options).await
                 })*
 
                 $(pub fn [< get_by_ $name >]<M: Into<$matcher_type>>(
                     &self,
                     matcher: M,
                     options: $options_type,
-                ) -> Result<Option<HtmlElement>, QueryError> {
+                ) -> Result<HtmlElement, QueryError> {
                     [< get_by_ $name >](&self.element, matcher, options)
                 })*
 

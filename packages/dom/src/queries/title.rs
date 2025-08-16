@@ -18,7 +18,7 @@ fn is_svg_title(node: &HtmlElement) -> bool {
             .is_some_and(|parent_node| parent_node.tag_name().to_lowercase() == "svg")
 }
 
-pub fn _query_all_by_title<M: Into<Matcher>>(
+pub(crate) fn _query_all_by_title<M: Into<Matcher>>(
     container: &HtmlElement,
     text: M,
     options: MatcherOptions,

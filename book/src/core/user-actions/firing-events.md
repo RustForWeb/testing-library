@@ -26,9 +26,7 @@ event.set_bubbles(true);
 event.set_cancelable(true);
 
 fire_event(
-    get_by_text(&container, "Submit")
-        .expect("Get should succeed.")
-        .expect("Get should return an element."),
+    get_by_text(&container, "Submit").expect("Get should succeed."),
     &event,
 ).expect("Event should be fired.");
 ```

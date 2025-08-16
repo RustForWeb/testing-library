@@ -20,6 +20,7 @@ pub use config::{configure, get_config};
 pub use error::QueryError;
 pub use events::*;
 pub use get_node_text::*;
+pub use get_queries_for_element::get_queries_for_element as within;
 pub use get_queries_for_element::*;
 pub use matches::get_default_normalizer;
 pub use pretty_dom::*;
@@ -34,4 +35,5 @@ pub use types::*;
 pub use wait_for::*;
 
 // TODO: Export useful types from `aria_query`.
+#[doc(no_inline)]
 pub use aria_query::{AriaRole, AriaRoleDefinitionKey};

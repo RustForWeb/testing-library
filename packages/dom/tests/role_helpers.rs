@@ -124,177 +124,142 @@ fn setup() -> Setup {
         unnamed_section: container_queries
             .get_by_test_id("a-section", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         named_section: container_queries
             .get_by_test_id("named-section", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         anchor: container_queries
             .get_by_test_id("a-link", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         h1: container_queries
             .get_by_test_id("a-h1", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         h2: container_queries
             .get_by_test_id("a-h2", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         h3: container_queries
             .get_by_test_id("a-h3", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         nav: container_queries
             .get_by_test_id("a-nav", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         article: container_queries
             .get_by_test_id("a-article", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         a_ul: container_queries
             .get_by_test_id("a-list", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         a_li1: container_queries
             .get_by_test_id("a-list-item-1", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         a_li2: container_queries
             .get_by_test_id("a-list-item-2", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         b_ul: container_queries
             .get_by_test_id("b-list", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         b_li1: container_queries
             .get_by_test_id("b-list-item-1", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         b_li2: container_queries
             .get_by_test_id("b-list-item-2", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         table: container_queries
             .get_by_test_id("a-table", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         tbody: container_queries
             .get_by_test_id("a-tbody", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         tr: container_queries
             .get_by_test_id("a-row", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         td1: container_queries
             .get_by_test_id("a-cell-1", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         td2: container_queries
             .get_by_test_id("a-cell-2", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         td3: container_queries
             .get_by_test_id("a-cell-3", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         unnamed_form: container_queries
             .get_by_test_id("a-form", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         named_form: container_queries
             .get_by_test_id("named-form", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         radio: container_queries
             .get_by_test_id("a-radio-1", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         radio2: container_queries
             .get_by_test_id("a-radio-2", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         input: container_queries
             .get_by_test_id("a-input-1", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         input2: container_queries
             .get_by_test_id("a-input-2", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         textarea: container_queries
             .get_by_test_id("a-textarea", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         dt: container_queries
             .get_by_test_id("a-dt", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         dd: container_queries
             .get_by_test_id("a-dd", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         header: container_queries
             .get_by_test_id("a-header", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         invalid_anchor: container_queries
             .get_by_test_id("invalid-link", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         unnamed_img: container_queries
             .get_by_test_id("a-img-1", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         presentation_img: container_queries
             .get_by_test_id("a-img-2", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         named_img: container_queries
             .get_by_test_id("a-img-3", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
         footer: container_queries
             .get_by_test_id("a-footer", MatcherOptions::default())
             .expect("Get should succeed.")
-            .expect("Query should return an element.")
             .into(),
     }
 }

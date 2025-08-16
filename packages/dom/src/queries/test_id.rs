@@ -12,7 +12,7 @@ fn get_test_id_attribute() -> String {
     get_config().test_id_attribute
 }
 
-pub fn _query_all_by_test_id<M: Into<Matcher>>(
+pub(crate) fn _query_all_by_test_id<M: Into<Matcher>>(
     container: &HtmlElement,
     id: M,
     options: MatcherOptions,

@@ -8,7 +8,7 @@ use crate::{
     types::{Matcher, MatcherOptions},
 };
 
-pub fn _query_all_by_alt_text<M: Into<Matcher>>(
+pub(crate) fn _query_all_by_alt_text<M: Into<Matcher>>(
     container: &HtmlElement,
     alt: M,
     options: MatcherOptions,

@@ -21,7 +21,7 @@ use crate::{
     util::node_list_to_vec,
 };
 
-pub fn _query_all_by_role<M: Into<ByRoleMatcher>>(
+pub(crate) fn _query_all_by_role<M: Into<ByRoleMatcher>>(
     container: &HtmlElement,
     role: M,
     options: ByRoleOptions,

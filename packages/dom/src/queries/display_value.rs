@@ -10,7 +10,7 @@ use crate::{
     util::{html_collection_to_vec, node_list_to_vec},
 };
 
-pub fn _query_all_by_display_value<M: Into<Matcher>>(
+pub(crate) fn _query_all_by_display_value<M: Into<Matcher>>(
     container: &HtmlElement,
     value: M,
     options: MatcherOptions,
