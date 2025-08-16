@@ -10,7 +10,7 @@ use crate::{
     util::node_list_to_vec,
 };
 
-pub fn _query_all_by_label_text<M: Into<Matcher>>(
+pub(crate) fn _query_all_by_label_text<M: Into<Matcher>>(
     container: &HtmlElement,
     text: M,
     options: SelectorMatcherOptions,

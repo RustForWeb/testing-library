@@ -103,14 +103,12 @@ fn busy_true_false_matches_busy_regions() {
     assert!(
         container_queries
             .get_by_role(AriaRole::Log, ByRoleOptions::default().busy(true))
-            .expect("Get should succeed.")
-            .is_some(),
+            .is_ok()
     );
     assert!(
         container_queries
             .get_by_role(AriaRole::Log, ByRoleOptions::default().busy(false))
-            .expect("Get should succeed.")
-            .is_some(),
+            .is_ok()
     );
 }
 
@@ -128,14 +126,12 @@ fn checked_true_false_matches_checked_checkboxes() {
     assert!(
         container_queries
             .get_by_role(AriaRole::Checkbox, ByRoleOptions::default().checked(true))
-            .expect("Get should succeed.")
-            .is_some(),
+            .is_ok()
     );
     assert!(
         container_queries
             .get_by_role(AriaRole::Checkbox, ByRoleOptions::default().checked(false))
-            .expect("Get should succeed.")
-            .is_some(),
+            .is_ok(),
     );
 }
 
@@ -153,14 +149,12 @@ fn checked_true_false_matches_checked_elements_with_proper_role() {
     assert!(
         container_queries
             .get_by_role(AriaRole::Checkbox, ByRoleOptions::default().checked(true))
-            .expect("Get should succeed.")
-            .is_some(),
+            .is_ok()
     );
     assert!(
         container_queries
             .get_by_role(AriaRole::Checkbox, ByRoleOptions::default().checked(false))
-            .expect("Get should succeed.")
-            .is_some(),
+            .is_ok()
     );
 }
 
@@ -179,13 +173,11 @@ fn checked_true_false_does_not_match_element_in_indeterminate_state() {
     container_queries
         .get_by_label_text("indeteminate yes", SelectorMatcherOptions::default())
         .expect("Get should succeed.")
-        .expect("Get should return a result.")
         .unchecked_into::<HtmlInputElement>()
         .set_indeterminate(true);
     container_queries
         .get_by_label_text("indeteminate no", SelectorMatcherOptions::default())
         .expect("Get should succeed.")
-        .expect("Get should return a result.")
         .unchecked_into::<HtmlInputElement>()
         .set_indeterminate(true);
 

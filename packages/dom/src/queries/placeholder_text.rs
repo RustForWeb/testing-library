@@ -7,7 +7,7 @@ use crate::{
     types::{Matcher, MatcherOptions},
 };
 
-pub fn _query_all_by_placeholder_text<M: Into<Matcher>>(
+pub(crate) fn _query_all_by_placeholder_text<M: Into<Matcher>>(
     container: &HtmlElement,
     text: M,
     options: MatcherOptions,
