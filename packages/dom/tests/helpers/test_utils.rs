@@ -1,4 +1,4 @@
-use testing_library_dom::{BoundFunctions, get_queries_for_element};
+use testing_library_dom::{BoundQueries, get_queries_for_element};
 use wasm_bindgen::JsCast;
 use web_sys::{Document, HtmlElement, window};
 
@@ -11,7 +11,7 @@ pub fn document() -> Document {
 
 pub struct RenderReturn {
     pub container: HtmlElement,
-    pub container_queries: BoundFunctions,
+    pub container_queries: BoundQueries,
     pub rerender: Box<dyn Fn(&str) -> RenderReturn>,
 }
 

@@ -7,18 +7,18 @@ use crate::{
     types::{Matcher, MatcherOptions, SelectorMatcherOptions, WaitForOptions},
 };
 
-pub fn get_queries_for_element(element: HtmlElement) -> BoundFunctions {
-    BoundFunctions { element }
+pub fn get_queries_for_element(element: HtmlElement) -> BoundQueries {
+    BoundQueries { element }
 }
 
-pub struct BoundFunctions {
+pub struct BoundQueries {
     element: HtmlElement,
 }
 
 macro_rules! queries_for_element {
     ($(($name:ident, $matcher_type:ty, $options_type:ty)),*,) => {
         paste::paste! {
-            impl BoundFunctions {
+            impl BoundQueries {
                 $(pub async fn [< find_by_ $name >]<M: Into<$matcher_type>>(
                     &self,
                     matcher: M,

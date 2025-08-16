@@ -2,9 +2,9 @@ use std::ops::Deref;
 
 use web_sys::window;
 
-use crate::{BoundFunctions, DocumentOrElement, get_queries_for_element, log_dom};
+use crate::{BoundQueries, DocumentOrElement, get_queries_for_element, log_dom};
 
-pub struct Screen(BoundFunctions);
+pub struct Screen(BoundQueries);
 
 impl Screen {
     pub fn debug(&self, elements: Option<Vec<DocumentOrElement>>, max_length: Option<usize>) {
@@ -19,7 +19,7 @@ impl Screen {
 }
 
 impl Deref for Screen {
-    type Target = BoundFunctions;
+    type Target = BoundQueries;
 
     fn deref(&self) -> &Self::Target {
         &self.0
