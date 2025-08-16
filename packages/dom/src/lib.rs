@@ -11,6 +11,7 @@ mod pretty_dom;
 pub mod queries;
 pub mod query_helpers;
 mod role_helpers;
+mod screen;
 mod suggestions;
 mod types;
 mod util;
@@ -30,6 +31,7 @@ pub use role_helpers::{
     GetRolesOptions, PrettyRolesOptions, get_implicit_aria_roles, get_roles, is_inaccessible,
     log_roles,
 };
+pub use screen::*;
 pub use suggestions::*;
 pub use types::*;
 pub use wait_for::*;
