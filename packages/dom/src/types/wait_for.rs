@@ -2,9 +2,9 @@ use web_sys::HtmlElement;
 
 #[derive(Clone, Default)]
 pub struct WaitForOptions {
-    container: Option<HtmlElement>,
-    timeout: Option<i32>,
-    interval: Option<i32>,
+    pub container: Option<HtmlElement>,
+    pub timeout: Option<i32>,
+    pub interval: Option<i32>,
     // on_timeout
     // mutation_observer_init
 }

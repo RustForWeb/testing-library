@@ -2,7 +2,7 @@ use web_sys::HtmlElement;
 
 use crate::{
     ByRoleMatcher, ByRoleOptions,
-    error::QueryError,
+    error::{QueryError, WaitForError},
     queries::*,
     types::{Matcher, MatcherOptions, SelectorMatcherOptions, WaitForOptions},
 };
@@ -24,7 +24,7 @@ macro_rules! queries_for_element {
                     matcher: M,
                     options: $options_type,
                     wait_for_options: WaitForOptions,
-                ) -> Result<HtmlElement, QueryError> {
+                ) -> Result<HtmlElement, WaitForError<QueryError>> {
                     [< find_by_ $name >](&self.element, matcher, options, wait_for_options).await
                 })*
 
@@ -33,7 +33,7 @@ macro_rules! queries_for_element {
                     matcher: M,
                     options: $options_type,
                     wait_for_options: WaitForOptions,
-                ) -> Result<Vec<HtmlElement>, QueryError> {
+                ) -> Result<Vec<HtmlElement>, WaitForError<QueryError>> {
                     [< find_all_by_ $name >](&self.element, matcher, options, wait_for_options).await
                 })*
 

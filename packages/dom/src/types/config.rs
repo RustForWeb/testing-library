@@ -12,6 +12,7 @@ pub type EventWrapperFn =
 #[derive(Clone)]
 pub struct Config {
     pub test_id_attribute: String,
+    pub async_util_timeout: i32,
     pub event_wrapper: Arc<EventWrapperFn>,
     // TODO
     /// Default value for the `hidden` option in `by_role` queries.
@@ -30,6 +31,9 @@ impl Config {
     pub fn update(&mut self, other: PartialConfig) {
         if let Some(test_id_attribute) = other.test_id_attribute {
             self.test_id_attribute = test_id_attribute;
+        }
+        if let Some(async_util_timeout) = other.async_util_timeout {
+            self.async_util_timeout = async_util_timeout;
         }
         if let Some(event_wrapper) = other.event_wrapper {
             self.event_wrapper = event_wrapper;
@@ -55,6 +59,7 @@ impl Config {
 #[derive(Clone, Default)]
 pub struct PartialConfig {
     pub test_id_attribute: Option<String>,
+    pub async_util_timeout: Option<i32>,
     pub event_wrapper: Option<Arc<EventWrapperFn>>,
     // TODO
     /// Default value for the `hidden` option in `by_role` queries.
@@ -72,6 +77,11 @@ pub struct PartialConfig {
 impl PartialConfig {
     pub fn test_id_attribute(mut self, value: &str) -> Self {
         self.test_id_attribute = Some(value.to_owned());
+        self
+    }
+
+    pub fn async_util_timeout(mut self, value: i32) -> Self {
+        self.async_util_timeout = Some(value);
         self
     }
 
@@ -110,6 +120,7 @@ impl From<&Config> for PartialConfig {
     fn from(value: &Config) -> Self {
         Self {
             test_id_attribute: Some(value.test_id_attribute.clone()),
+            async_util_timeout: Some(value.async_util_timeout),
             event_wrapper: Some(value.event_wrapper.clone()),
             default_hidden: Some(value.default_hidden),
             default_ignore: Some(value.default_ignore.clone()),

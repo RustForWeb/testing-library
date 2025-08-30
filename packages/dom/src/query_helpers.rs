@@ -155,12 +155,23 @@ macro_rules! make_find_query {
             matcher: M,
             options: $options_type,
             wait_for_options: WaitForOptions,
-        ) -> Result<$return_type, QueryError> {
+        ) -> Result<$return_type, WaitForError<QueryError>> {
             wait_for(
                 {
                     let matcher = matcher.into();
-                    let container = container.clone();
-                    Box::new(move || $getter(&container, matcher.clone(), options.clone()))
+
+                    move || $getter(&container, matcher.clone(), options.clone())
+
+                    // TODO: Remove if not using async for `wait_for` callback.
+                    // move || {
+                    //     let matcher = matcher.clone();
+                    //     let container = container.clone();
+                    //     let options = options.clone();
+
+                    //     Box::pin(
+                    //         async move { $getter(&container, matcher.clone(), options.clone()) },
+                    //     )
+                    // }
                 },
                 wait_for_options.container(container.clone()),
             )
@@ -228,7 +239,7 @@ macro_rules! build_queries {
 
                 use $crate::{
                     config::get_config,
-                    error::QueryError,
+                    error::{QueryError, WaitForError},
                     query_helpers::{get_element_error, get_multiple_elements_found_error, get_suggestion_error},
                     types::{Variant, WaitForOptions},
                     suggestions::{get_suggested_query},

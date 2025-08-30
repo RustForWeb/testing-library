@@ -32,3 +32,11 @@ pub enum CreateOrFireEventError {
     #[error(transparent)]
     Fire(#[from] FireEventError),
 }
+
+#[derive(Debug, Error, PartialEq)]
+pub enum WaitForError<E> {
+    #[error("Timed out in `wait_for`.")]
+    TimedOut,
+    #[error(transparent)]
+    Error(#[from] E),
+}

@@ -18,7 +18,7 @@ mod util;
 mod wait_for;
 
 pub use config::{configure, get_config};
-pub use error::QueryError;
+pub use error::*;
 pub use events::*;
 pub use get_node_text::*;
 pub use get_queries_for_element::get_queries_for_element as within;
