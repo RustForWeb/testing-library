@@ -10,7 +10,7 @@ repository.workspace = true
 version.workspace = true
 
 [dependencies]
-aria-query = "0.0.5"
+aria-query = "0.0.6"
 dom-accessibility-api = "0.0.3"
 log.workspace = true
 ordered_hash_map = "0.5.0"
