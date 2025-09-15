@@ -13,7 +13,7 @@ version.workspace = true
 aria-query = "0.0.5"
 dom-accessibility-api = "0.0.3"
 log.workspace = true
-ordered_hash_map = "0.4.0"
+ordered_hash_map = "0.5.0"
 paste = "1.0.15"
 pretty-format = { path = "../pretty-format", version = "0.0.1" }
 regex.workspace = true
