@@ -12,7 +12,7 @@ Rust Testing Library is a Rust port of [Testing Library](https://testing-library
 
 Rust Testing Library is available for these Rust frameworks:
 
-- [DOM](./packages/dom) ([`web-sys`](https://rustwasm.github.io/wasm-bindgen/web-sys/index.html))
+- [DOM](./frameworks/dom/README.md) ([`web-sys`](https://rustwasm.github.io/wasm-bindgen/web-sys/index.html))
 
 The following frameworks are under consideration:
 
