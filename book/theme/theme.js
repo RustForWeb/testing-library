@@ -5,7 +5,7 @@ window.addEventListener('message', (event) => {
 
     const data = event.data.mdbookTrunk;
     const iframe = Array.from(document.getElementsByTagName('iframe')).find(
-        (iframe) => iframe.contentWindow === event.source
+        (iframe) => iframe.contentWindow === event.source,
     );
     if (iframe) {
         iframe.style.height = `${data.height}px`;

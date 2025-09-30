@@ -112,6 +112,12 @@ pub enum Ignore {
     String(String),
 }
 
+impl From<&str> for Ignore {
+    fn from(value: &str) -> Self {
+        Ignore::String(value.to_owned())
+    }
+}
+
 impl From<String> for Ignore {
     fn from(value: String) -> Self {
         Ignore::String(value)
@@ -170,4 +176,16 @@ impl SelectorMatcherOptions {
 pub struct DefaultNormalizerOptions {
     pub trim: Option<bool>,
     pub collapse_whitespace: Option<bool>,
+}
+
+impl DefaultNormalizerOptions {
+    pub fn trim(mut self, value: bool) -> Self {
+        self.trim = Some(value);
+        self
+    }
+
+    pub fn collapse_whitespace(mut self, value: bool) -> Self {
+        self.collapse_whitespace = Some(value);
+        self
+    }
 }

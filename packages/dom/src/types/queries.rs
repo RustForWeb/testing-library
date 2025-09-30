@@ -8,10 +8,50 @@ pub struct ByRoleOptionsValue {
     pub text: Option<Matcher>,
 }
 
+impl ByRoleOptionsValue {
+    pub fn now(mut self, value: f64) -> Self {
+        self.now = Some(value);
+        self
+    }
+
+    pub fn min(mut self, value: f64) -> Self {
+        self.min = Some(value);
+        self
+    }
+
+    pub fn max(mut self, value: f64) -> Self {
+        self.max = Some(value);
+        self
+    }
+
+    pub fn text<M: Into<Matcher>>(mut self, value: M) -> Self {
+        self.text = Some(value.into());
+        self
+    }
+}
+
 #[derive(Clone, Eq, PartialEq)]
 pub enum ByRoleOptionsCurrent {
     Bool(bool),
     String(String),
+}
+
+impl From<bool> for ByRoleOptionsCurrent {
+    fn from(value: bool) -> Self {
+        Self::Bool(value)
+    }
+}
+
+impl From<&str> for ByRoleOptionsCurrent {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_owned())
+    }
+}
+
+impl From<String> for ByRoleOptionsCurrent {
+    fn from(value: String) -> Self {
+        Self::String(value)
+    }
 }
 
 #[derive(Clone, Default)]
@@ -62,8 +102,8 @@ impl ByRoleOptions {
         self
     }
 
-    pub fn current(mut self, value: ByRoleOptionsCurrent) -> Self {
-        self.current = Some(value);
+    pub fn current<C: Into<ByRoleOptionsCurrent>>(mut self, value: C) -> Self {
+        self.current = Some(value.into());
         self
     }
 

@@ -34,7 +34,9 @@ fire_event(
 ## `FireEvent::[<event_name>]`
 
 ```rust,ignore
-fn [<event_name>](node: &EventTarget, event_properties: &[<EventInit>]) -> Result<bool, CreateOrFireEventError>;
+fn [<event_name>](node: &EventTarget) -> Result<bool, CreateOrFireEventError>;
+
+fn [<event_name>]_with_init(node: &EventTarget, init: &[<EventInit>]) -> Result<bool, CreateOrFireEventError>;
 ```
 
 Convenience methods for firing DOM events. Check out `src/events.rs` for a full list as well as default event proprties.
@@ -53,12 +55,12 @@ let init = KeyboardEventInit::new();
 init.set_key("Enter");
 init.set_code("Enter");
 init.set_char_code(13);
-FireEvent::key_down(&dom_node, &init).expect("Event should be fired.");
+FireEvent::key_down_with_init(&dom_node, &init).expect("Event should be fired.");
 
 let init = KeyboardEventInit::new();
 init.set_key("A");
 init.set_code("KeyA");
-FireEvent::key_down(&dom_node, &init).expect("Event should be fired.");
+FireEvent::key_down_with_init(&dom_node, &init).expect("Event should be fired.");
 ```
 
 You can find out which key code to use at https://www.toptal.com/developers/keycode.
@@ -66,7 +68,9 @@ You can find out which key code to use at https://www.toptal.com/developers/keyc
 ## `CreateEvent::[<event_name>]`
 
 ```rust,ignore
-fn [<event_name>](node: &EventTarget, event_properties: &[<EventInit>]) -> Result<[<Event>], CreateOrFireEventError>;
+fn [<event_name>](node: &EventTarget) -> Result<[<Event>], CreateOrFireEventError>;
+
+fn [<event_name>]_with_init(node: &EventTarget, init: &[<EventInit>]) -> Result<[<Event>], CreateOrFireEventError>;
 ```
 
 Convenience methods for creating DOM events that can then be fired by `fire_event`, allowing you to have a reference to the event created: this might be useful if you need to access event properties that cannot be initiated programmatically (such as [`time_stamp`](https://docs.rs/web-sys/latest/web_sys/struct.Event.html#method.time_stamp)).
@@ -77,7 +81,7 @@ use web_sys::MouseEventInit;
 
 let init = MouseEventInit::new();
 init.set_button(2);
-let my_event = CreateEvent::click(&node, &init).expect("Event should be created.");
+let my_event = CreateEvent::click_with_init(&node, &init).expect("Event should be created.");
 
 fire_event(&node, &my_event).expect("Event should be fired.");
 
