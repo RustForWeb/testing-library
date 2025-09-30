@@ -70,8 +70,8 @@ pub struct PartialConfig {
 }
 
 impl PartialConfig {
-    pub fn test_id_attribute(mut self, value: String) -> Self {
-        self.test_id_attribute = Some(value);
+    pub fn test_id_attribute(mut self, value: &str) -> Self {
+        self.test_id_attribute = Some(value.to_owned());
         self
     }
 
@@ -85,8 +85,8 @@ impl PartialConfig {
         self
     }
 
-    pub fn default_ignore(mut self, value: String) -> Self {
-        self.default_ignore = Some(value);
+    pub fn default_ignore(mut self, value: &str) -> Self {
+        self.default_ignore = Some(value.to_owned());
         self
     }
 

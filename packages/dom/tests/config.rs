@@ -61,7 +61,7 @@ fn configure_overrides_existing_values() {
     let lock = before_each();
 
     configure(ConfigFnOrPartial::Partial(
-        PartialConfig::default().test_id_attribute("new-id".to_owned()),
+        PartialConfig::default().test_id_attribute("new-id"),
     ));
 
     let config = get_config();
@@ -77,7 +77,7 @@ fn configure_passes_existing_config_out_to_config_function() {
     // Create a new config key based on the value of an existing one.
     configure(ConfigFnOrPartial::Fn(Box::new(|existing_config| {
         PartialConfig::default()
-            .test_id_attribute(format!("{}-derived", existing_config.test_id_attribute))
+            .test_id_attribute(&format!("{}-derived", existing_config.test_id_attribute))
     })));
 
     // The new value should be there, and existing values should be untouched.

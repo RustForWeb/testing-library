@@ -1,3 +1,0 @@
-# DOM Testing Library
-
-TODO
