@@ -78,7 +78,7 @@ web-sys = { workspace = true, features = [
 
 [dev-dependencies]
 indoc = "2.0.5"
-mockall = "0.13.0"
+mockall = "0.14.0"
 pretty_assertions = "1.4.1"
 send_wrapper = "0.6.0"
 testing_logger = "0.1.1"
