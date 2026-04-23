@@ -99,7 +99,7 @@ static ELEMENT_ROLE_LIST: LazyLock<Vec<ElementRole>> = LazyLock::new(|| {
         });
     }
 
-    result.sort_by(|left, right| right.specificity.cmp(&left.specificity));
+    result.sort_by_key(|element_role| element_role.specificity);
 
     result
 });
