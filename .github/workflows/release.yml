@@ -1,0 +1,24 @@
+name: Release
+
+on:
+    workflow_dispatch:
+        inputs:
+            bump:
+                description: 'Bump version by semver keyword.'
+                required: true
+                type: choice
+                options:
+                    - patch
+                    - minor
+                    - major
+
+permissions:
+    contents: write
+
+jobs:
+    release:
+        name: Release
+        uses: RustForWeb/.github/.github/workflows/release.yml@373c25f8fd29e10c40f1343f13312f8be3514af0
+        with:
+            bump: ${{ inputs.bump }}
+            target: wasm32-unknown-unknown
