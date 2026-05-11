@@ -35,7 +35,7 @@ version = "0.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "be9b9157d5ea67b5f25449f94fd9b91806b12a27bd165e84f746b654480d44b6"
 dependencies = [
- "ordered_hash_map",
+ "ordered_hash_map 0.5.0",
 ]
 
 [[package]]
@@ -193,6 +193,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "ordered_hash_map"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe5a1cbf49ce5de21ddae71cd1fbe91ff9e38d6a7a9af366fd9be6cea94d856f"
+dependencies = [
+ "hashbrown",
+]
+
+[[package]]
 name = "paste"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -344,7 +353,7 @@ dependencies = [
  "indoc",
  "log",
  "mockall",
- "ordered_hash_map",
+ "ordered_hash_map 0.6.0",
  "paste",
  "pretty-format",
  "pretty_assertions",
