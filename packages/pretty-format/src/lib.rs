@@ -25,7 +25,7 @@ fn print_big_int(val: &BigInt) -> String {
     format!(
         "{}n",
         String::from(
-            val.to_string_with_radix(10)
+            val.to_string(10)
                 .expect("Number should be formatted as string.")
         )
     )
