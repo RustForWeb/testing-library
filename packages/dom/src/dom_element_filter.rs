@@ -241,7 +241,7 @@ impl Plugin for DomElementFilter {
                     named_node_map_to_hashmap(node.unchecked_ref::<Element>().attributes())
                 },
                 config,
-                format!("{}{}", indentation, &config.indent),
+                format!("{}{}", indentation, config.indent),
                 depth,
                 refs.clone(),
                 printer,
@@ -252,7 +252,7 @@ impl Plugin for DomElementFilter {
                     .filter(&self.filter_node)
                     .collect(),
                 config,
-                format!("{}{}", indentation, &config.indent),
+                format!("{}{}", indentation, config.indent),
                 depth,
                 refs.clone(),
                 printer,
