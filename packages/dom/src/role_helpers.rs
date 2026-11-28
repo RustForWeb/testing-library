@@ -122,18 +122,13 @@ pub fn is_subtree_inaccessible(element: &Element) -> bool {
         .default_view()
         .expect("Owner document should have default view.");
 
-    if window
+    window
         .get_computed_style(element)
         .expect("Element should be valid.")
         .expect("Computed style should exist.")
         .get_property_value("display")
         .expect("Computed style should have display.")
         == "none"
-    {
-        return true;
-    }
-
-    false
 }
 
 // Partial implementation https://www.w3.org/TR/wai-aria-1.2/#tree_exclusion
